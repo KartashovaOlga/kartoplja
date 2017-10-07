@@ -8,13 +8,6 @@
 Выходные данные: десятичное представление введенного числа.
  */
 
-/* 
- * File:   main.c
- * Author: IS
- *
- * Created on 1 октября 2017 г., 12:24
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
