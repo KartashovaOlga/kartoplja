@@ -17,13 +17,6 @@
 т.е. при необходимости дополнено ведущими нулями.
  */
 
-/* 
- * File:   main.c
- * Author: IS
- *
- * Created on 1 октября 2017 г., 18:10
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 
