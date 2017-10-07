@@ -9,12 +9,6 @@
 Выходные данные: oдно действительное число - значение константы е.
 */
 
-/* 
- * File:   main.c
- * Author: IS
- *
- * Created on 1 октября 2017 г., 13:26
- */
 
 #include <stdio.h>
 #include <stdlib.h>
