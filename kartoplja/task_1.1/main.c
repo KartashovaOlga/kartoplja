@@ -50,8 +50,8 @@ int main(int argc, char** argv) {
 }
 
 size_t getNumber(void){
-    size_t i;  
+    size_t number;  
     printf("Enter the square's side length: \n");
-    scanf("%u", &i);
-    return i;
+    scanf("%u", &number);
+    return number;
 }
