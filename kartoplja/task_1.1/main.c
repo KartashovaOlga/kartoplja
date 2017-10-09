@@ -7,37 +7,51 @@
 Выходные данные: pисунок полого квадрата в виде звездочек.
  */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 
+size_t getNumber(void);
+
 int main(int argc, char** argv) {
-    int length;
+    size_t length = getNumber();
     
-    printf("Enter the square's side length: \n");
-    scanf("%d", &length);
-    
-    while(length > 80 || length < 0){
-        printf("Enter the square's side length: \n");
-        scanf("%d", &length);
+    while(length > 80 || length < 0)
+    {
+       length = getNumber();
     }
     
-    for(int i = 0; i < length; i++){
-        if(i == 0 || i == length -1){
-            for(int j = 0; j < length; j++){
+    int i, j;
+    
+    for(i = 0; i < length; i++)
+    {
+        if(i == 0 || i == length -1)
+        {
+            for(j = 0; j < length; j++)
+            {
                 printf("*");
             }
-       }else{
-            for(int j = 0; j < length; j++){
-                if(j == 0 || j == length -1){
+        }else
+        {
+            for(int j = 0; j < length; j++)
+            {
+                if(j == 0 || j == length -1)
+                {
                     printf("*");
-                }else{
+                }else
+                {
                     printf(" ");
                 }
             }
-       }
+        }
        printf("\n");
     }
      
     return (EXIT_SUCCESS);
+}
+
+size_t getNumber(void){
+    size_t i;  
+    printf("Enter the square's side length: \n");
+    scanf("%u", &i);
+    return i;
 }
