@@ -14,6 +14,7 @@
 
 int factorial(int i);
 float getNumber(void);
+double calculateExp(float precision);
 
 int main(int argc, char** argv) 
 {
@@ -24,14 +25,7 @@ int main(int argc, char** argv)
         precision = getNumber();
     }
     
-    double temp = 1.0, exp = 1.0;   
-    int num = 1;
-    while(temp > precision)
-    {
-        temp = 1.0 / (double) factorial(num);
-        exp += temp ;
-        num++;
-    }
+    double exp = calculateExp(precision);
     
     printf("Exponent = %lf", exp);       
 
@@ -52,4 +46,17 @@ float getNumber(void)
     printf("Enter the square's side length: \n");
     scanf("%f", &i);
     return i;
+}
+
+double calculateExp(float precision){
+    double temp = 1.0;
+    double exp = 1.0;   
+    int num = 1;
+    while(temp > precision)
+    {
+        temp = 1.0 / (double) factorial(num);
+        exp += temp ;
+        num++;
+    }
+    return exp;
 }
