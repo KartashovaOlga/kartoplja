@@ -9,43 +9,56 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <math.h>
 
-/*
- * 
- */
+int convertToDecimal(int binary);
+int getBinaryNum(void);
+int checkNumber(int number);
+
 int main(int argc, char** argv) {
-    int binaryNumber;
+    int binaryNumber = getBinaryNum();
     
-    printf("Enter the binary number: ");
-    scanf("%d", &binaryNumber);
-    
-    while(binaryNumber < 0){
-        printf("Enter the binary number: ");
-        scanf("%d", &binaryNumber);
-    }
-    int number, tmp, decimalNumber = 0;
+    int decimalNumber = convertToDecimal(binaryNumber);
+   
+    printf("\nBinary number: %d\nDecimal number: %d", binaryNumber, decimalNumber);
+
+    return 0;
+}
+
+int convertToDecimal(int binaryNum){
+    int number, tmp;
+    int decimalNumber = 0;
     float c = 0.0;
-    number = binaryNumber;
-    while (number != 0) {
+    number = binaryNum;
+    
+    while (number != 0) 
+    {
         tmp = number % 10;
         number /= 10;
         decimalNumber += (int)powf(2.0, c) * tmp;
         c++;
-        
-        
-        /*if(number %10 != 0 ){
-                number /= 10;
-                decimalNumber += (int)powf(2.0, c);
-                c++;
-            }else{
-                number /= 10;
-                c++;
-            }*/
-	}
-	printf("\nBinary number: %d\nDecimal number: %d", binaryNumber, decimalNumber);
-
-    return (EXIT_SUCCESS);
+    }
+    return decimalNumber;
 }
 
+int getBinaryNum(void){
+    char bNum[12];
+    int binaryNum;
+    
+    printf("Enter the binary number: \n");
+    gets(bNum);
+    binaryNum = atoi(bNum);
+    
+    if(binaryNum < 0)
+    {
+        binaryNum = getBinaryNum();
+    }
+    
+    return binaryNum;
+}
+
+int checkNumber(int number){
+    
+}
