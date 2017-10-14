@@ -26,7 +26,7 @@ int main(int argc, char** argv)
 {
     float number = getNumber();
         
-    while(number <= 0 || number >= 1000)
+    while(number <= 0 || number >= 999.99)
     {
         number = getNumber();
     }
