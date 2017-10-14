@@ -22,6 +22,7 @@ int main(int argc, char** argv) {
         
     while(length < 0)
     {
+      printf("You entered a negative number\n");  
       length = getNumber();
     }
     
