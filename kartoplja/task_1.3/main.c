@@ -43,7 +43,7 @@ int factorial(int i){
 float getNumber(void)
 {
     float i;  
-    printf("Enter the square's side length: \n");
+    printf("Enter the required precision: \n");
     scanf("%f", &i);
     return i;
 }
