@@ -64,28 +64,27 @@ int * openFile(void)
                     break;
                 }
             }
+		
             if(count <= size)
             {
-             int *arr = (int*) malloc(count*sizeof(int));
+             	int *arr = (int*) malloc(count*sizeof(int));
+            	fseek(inputFile, 0, SEEK_SET);
 
-            fseek(inputFile, 0, SEEK_SET);
+            	for(i = 0; i < count; i++)
+            	{
+                	fscanf(inputFile, "%d\n", &arr[i]);
+            	}
 
-            for(i = 0; i < count; i++)
-            {
-                fscanf(inputFile, "%d\n", &arr[i]);
-            }
+            	fclose(inputFile);
 
-            fclose(inputFile);
-
-            selectionSort(arr, count, 0);
-            writeToFile(arr, count);
+            	selectionSort(arr, count, 0);
+            	writeToFile(arr, count);
             
-            return arr;  
+            	return arr;  
             }else
             {
                 return 0;
-            }
-            
+            } 
         }
     }
 }
