@@ -73,7 +73,7 @@ int * openFile(void)
             	for(i = 0; i < count; i++)
             	{
                 	fscanf(inputFile, "%d\n", &arr[i]);
-            	}
+            	} 
 
             	fclose(inputFile);
 
