@@ -19,14 +19,15 @@ int getBinaryNum(void);
 int main(int argc, char** argv) {
     int binaryNumber = getBinaryNum();
 
-    while(binaryNumber < 0)
+    if(binaryNumber != 0)
+    {
+        int decimalNumber = convertToDecimal(binaryNumber);
+        printf("\nBinary number: %d\nDecimal number: %d", binaryNumber, decimalNumber);
+    }else
     {
         printf("You entered a wrong number\n");
         binaryNumber = getBinaryNum();
     }
-
-    int decimalNumber = convertToDecimal(binaryNumber);
-    printf("\nBinary number: %d\nDecimal number: %d", binaryNumber, decimalNumber);
 
     return 0;
 }
@@ -49,10 +50,9 @@ int convertToDecimal(int binaryNum){
 
 int getBinaryNum(void){
     int binaryNum;
-    int count = binaryNum;
 
     printf("Enter the binary number:\n");
-    scanf( "%d", &binaryNum);
+    scanf("%[01]", &binaryNum);
 
     return binaryNum;
 }
