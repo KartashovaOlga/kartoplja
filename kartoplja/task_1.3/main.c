@@ -32,7 +32,8 @@ int main(int argc, char** argv)
     return 0;
 }
 
-int factorial(int i){
+int factorial(int i)
+{
     if(i <= 1)
     {
         return 1;
@@ -48,7 +49,8 @@ float getNumber(void)
     return i;
 }
 
-double calculateExp(float precision){
+double calculateExp(float precision)
+{
     double temp = 1.0;
     double exp = 1.0;   
     int num = 1;
