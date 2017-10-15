@@ -13,15 +13,19 @@
 #include <stdlib.h>
 #include <math.h>
 
-int convertToDecimal(int binary);
+int convertToDecimal(int binaryNum);
 int getBinaryNum(void);
-int checkNumber(int number);
 
 int main(int argc, char** argv) {
     int binaryNumber = getBinaryNum();
-    
+
+    while(binaryNumber < 0)
+    {
+        printf("You entered a wrong number\n");
+        binaryNumber = getBinaryNum();
+    }
+
     int decimalNumber = convertToDecimal(binaryNumber);
-   
     printf("\nBinary number: %d\nDecimal number: %d", binaryNumber, decimalNumber);
 
     return 0;
@@ -30,35 +34,25 @@ int main(int argc, char** argv) {
 int convertToDecimal(int binaryNum){
     int number, tmp;
     int decimalNumber = 0;
-    float c = 0.0;
+    int c = 0;
     number = binaryNum;
-    
-    while (number != 0) 
+
+    while (number != 0)
     {
         tmp = number % 10;
         number /= 10;
-        decimalNumber += (int)powf(2.0, c) * tmp;
+        decimalNumber += powf(2, c) * tmp;
         c++;
     }
     return decimalNumber;
 }
 
 int getBinaryNum(void){
-    char bNum[12];
     int binaryNum;
-    
-    printf("Enter the binary number: \n");
-    gets(bNum);
-    binaryNum = atoi(bNum);
-    
-    if(binaryNum < 0)
-    {
-        binaryNum = getBinaryNum();
-    }
-    
-    return binaryNum;
-}
+    int count = binaryNum;
 
-int checkNumber(int number){
-    
+    printf("Enter the binary number:\n");
+    scanf( "%d", &binaryNum);
+
+    return binaryNum;
 }
