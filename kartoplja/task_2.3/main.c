@@ -14,23 +14,22 @@
 #include <stdlib.h>
 #include <string.h>
 
-float  openFile(void);
+float  readFromFile(void);
 void writeToFile(float summ);
+
 
 int main(int argc, char** argv)
 {
-    float summ = openFile();
-    if(summ > 0)
-    {
-        writeToFile(summ);
-    }
+    float summ = readFromFile();
+    writeToFile(summ);
+    
     return 0;
 }
 
-float openFile(void)
+float readFromFile(void)
 {
     int count = 0;
-    float s;
+    float f = 0;
     float summ = 0;
 
     FILE *inputFile;
@@ -40,7 +39,8 @@ float openFile(void)
     {
         printf("File not found\n");
         return  0;
-    }else
+    }
+    else
     {
         fseek(inputFile, 0, SEEK_END);
         unsigned int size = ftell(inputFile);
@@ -51,14 +51,16 @@ float openFile(void)
             fclose(inputFile);
 
             return 0;
-        }else
+        }
+        else
         {
             fseek(inputFile, 0, SEEK_SET);
             
+            
              while (!feof(inputFile) && !ferror(inputFile))
             {
-                fscanf(inputFile, "%f%*[\n]", &s);
-                summ += s;
+                fscanf(inputFile, "%f\n", &f);
+                summ += f;
                 count++;
                 if(count > size)
                 {
@@ -67,7 +69,6 @@ float openFile(void)
                     break;
                 }
             }
-            
             fclose(inputFile);
             
             return summ;
@@ -78,7 +79,6 @@ float openFile(void)
 void writeToFile(float summ)
 {
     char str[] = "---------";
-    char star[] = "*********";
     char position[] = "123456789";
     FILE *file = fopen("c:\\Temp\\output.txt", "w");
 
@@ -86,9 +86,12 @@ void writeToFile(float summ)
     {
         printf("File was not created\n");
 
-    } else
+    } 
+    else
     {
-        fprintf(file, "%9.2f\n%s\n%s\n", summ, str, position);
+        fprintf(file, "%0*.*f\n", 9, 2, summ);
+        fprintf(file, "%s\n", str);
+        fprintf(file, "%s", position);
         
         fclose(file);
     }
