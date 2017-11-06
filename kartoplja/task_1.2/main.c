@@ -13,46 +13,71 @@
 #include <stdlib.h>
 #include <math.h>
 
-int convertToDecimal(int binaryNum);
-int getBinaryNum(void);
+int convertToDecimal(char *binaryNum);
+void getBinaryNum(char *bNum);
+int isBinary(char *binaryNum);
 
-int main(int argc, char** argv) {
-    int binaryNumber = getBinaryNum();
-
-    if(binaryNumber != 0)
+int main(int argc, char** argv) 
+{
+    char *binaryNum;
+    
+    getBinaryNum(binaryNum);
+    
+    int result = isBinary(binaryNum);
+   
+    if(result == 1)
     {
-        int decimalNumber = convertToDecimal(binaryNumber);
-        printf("\nBinary number: %d\nDecimal number: %d", binaryNumber, decimalNumber);
-    }else
+        int decimalNumber = convertToDecimal(binaryNum);
+        
+        printf("Binary number: %s\nDecimal number: %d", binaryNum, decimalNumber);
+    }
+    else
     {
         printf("You entered a wrong number\n");
-        binaryNumber = getBinaryNum();
     }
-
     return 0;
 }
 
-int convertToDecimal(int binaryNum){
-    int number, tmp;
+int convertToDecimal(char *binaryNum)
+{
+    int i, count = 0;
     int decimalNumber = 0;
-    int c = 0;
-    number = binaryNum;
-
-    while (number != 0)
+    for(int i = strlen(binaryNum) - 1; i >= 0; i--)
     {
-        tmp = number % 10;
-        number /= 10;
-        decimalNumber += powf(2, c) * tmp;
-        c++;
+        if(binaryNum[i] == '1')
+        {
+            decimalNumber += powf(2, count);
+            count++;
+        }
+        else
+        {
+            count++;
+        }
     }
+    
     return decimalNumber;
 }
 
-int getBinaryNum(void){
-    int binaryNum;
-
+void getBinaryNum(char *bNum)
+{
     printf("Enter the binary number:\n");
-    scanf("%[01]", &binaryNum);
+    scanf("%s", bNum);
+}
 
-    return binaryNum;
+int isBinary(char *binaryNum)
+{
+    int i;
+    for(i = 0; i < strlen(binaryNum); i ++)
+    {
+        if(binaryNum[i] != '1' && binaryNum[i] != '0')
+        {
+            return -1;
+            break;
+        }
+        else
+        {
+            
+        }
+    }
+    return 1;
 }
