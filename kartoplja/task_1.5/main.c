@@ -15,18 +15,12 @@
 #include <stdio.h>
 
 int getNumber(void);
-void pythagoreanTriplets(int length);
+void getPythagoreanTriplets(int length);
 
 int main(int argc, char** argv) {
     int length = getNumber();
-        
-    while(length < 0)
-    {
-      printf("You entered a negative number\n");  
-      length = getNumber();
-    }
-    
-    pythagoreanTriplets(length);
+           
+    getPythagoreanTriplets(length);
     
     return 0;
 }
@@ -35,14 +29,21 @@ int getNumber(void){
     int length;
     printf("Enter the max length of the triangle side: \n");
     scanf("%d", &length);
+    
+     while(length < 0)
+    {
+      printf("You entered a negative number\n");  
+      printf("Enter the max length of the triangle side: \n");
+      scanf("%d", &length);
+    }
     return length;
 }
 
-void pythagoreanTriplets(int length){
+void getPythagoreanTriplets(int length){
     int leg1, leg2, hypotenuse;
     
     printf("Leg 1\tLeg 2\tHypotenuse\n");
-    
+    int counter = 0;
     for(hypotenuse = 1; hypotenuse <= length; hypotenuse++)
     {
         for(leg1 = 1; leg1 <= length; leg1++)
@@ -52,8 +53,13 @@ void pythagoreanTriplets(int length){
                 if(hypotenuse*hypotenuse == ((leg1*leg1) + (leg2*leg2)))
                 {
                     printf("%d\t%d\t%d\n", leg1, leg2, hypotenuse);
+                    counter++;
                 }
             }
         }
+    }
+    if (counter == 0)
+    {
+        printf("There is no pythagorean trip");
     }
 }
