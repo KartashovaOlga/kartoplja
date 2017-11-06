@@ -19,29 +19,24 @@
 
 #include <stdio.h>
 
-void toString(float f);
+void toString(float input);
 float getNumber(void);
 
 int main(int argc, char** argv) 
 {
     float number = getNumber();
-        
-    while(number <= 0 || number >= 999.99)
-    {
-        number = getNumber();
-    }
-    
+            
     toString(number);
     
     return 0;
 }
 
-void toString(float f)
+void toString(float input)
 {
     char *str [5];
     
-    float temp = f/100.0;
-    int hundreds = (int)temp;
+    int temp = input;
+    int hundreds = temp/100;
     
     switch(hundreds)
     {
@@ -57,9 +52,8 @@ void toString(float f)
         case 0: str[0] = ""; break;
     }
     
-    int dozens = (int)10*(temp - hundreds);
-    int rubles = (int)10*(10*(temp - hundreds ) - dozens);
-    int pennies = (int) 100*(10*(10*(f/100.0 - hundreds ) - dozens) - rubles);  
+    int dozens = (temp - hundreds*100) / 10;
+    int rubles = temp - hundreds*100 - dozens*10;
 
     switch(dozens)
     {
@@ -107,32 +101,40 @@ void toString(float f)
     if(rubles == 1 && dozens != 1)
     {
        str[3] = "рубль ";
-    }else if(rubles > 1 && rubles < 5  && dozens != 1)
+    }
+    else if(rubles > 1 && rubles < 5  && dozens != 1)
     {
        str[3] = "рубля ";
-    }else
+    }
+    else
     {
         str[3] = "рублей "; 
     }
-        
-    int kopek;
-    float kop;
+    
+    int pennies = (input - temp) * 100;
+    int kopek = pennies;
+       
     if(pennies > 20 )
     {
-        kop = (double)pennies / 10.0;
-        kopek =  (int)10*(kop - pennies/10);
-    }else
+        while(kopek > 10)
+        {
+            kopek -= 10;
+        }
+    }
+    else
     {
-        kopek = pennies;
+        
     }    
     
     if(kopek == 1)
     {
         str[4] = " копейка";
-    }else if(kopek > 1 && kopek < 5)
+    }
+    else if(kopek > 1 && kopek < 5)
     {
         str[4] = " копейки";
-    }else
+    }
+    else
     {
         str[4] = " копеек";
     }
@@ -141,10 +143,12 @@ void toString(float f)
     if(pennies < 10 && pennies > 0)
     {
        printf("%s%s%s%s%d%d%s\n", str[0], str[1], str[2], str[3], zero, pennies, str[4]); 
-    }else if(pennies == 0)
+    }
+    else if(pennies == 0)
     {
         printf("%s%s%s%s%d%d%s\n", str[0], str[1], str[2], str[3], zero, zero, str[4]); 
-    }else
+    }
+    else
     {
         printf("%s%s%s%s%d%s\n", str[0], str[1], str[2], str[3], pennies, str[4]); 
     }               
@@ -155,5 +159,12 @@ float getNumber(void)
     float number;
     printf("Enter the number: \n");
     scanf("%f", &number);
+    
+    while(number <= 0 || number >= 999.99)
+    {
+       printf("You entered invalid character\n");
+       printf("Enter the number: \n");
+       scanf("%f", &number);
+    }
     return number;
 }
