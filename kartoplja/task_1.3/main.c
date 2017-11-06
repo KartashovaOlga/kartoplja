@@ -11,24 +11,25 @@
 
 
 #include <stdio.h>
+#include <stdlib.h>
 
 int factorial(int i);
-float getNumber(void);
-double calculateExp(float precision);
+double getNumber(void);
+double calculateExp(const double precision);
+void printExp(const double exp, int reqPrecision);
+int getPrecision(double input);
 
 int main(int argc, char** argv) 
 {
-    float precision = getNumber();
+    double precision = getNumber();  
     
-    while(precision >= 1 || precision <= 0)
-    {
-        precision = getNumber();
-    }
-    
-    double exp = calculateExp(precision);
-    
-    printf("Exponent = %lf", exp);       
 
+    double exp = calculateExp(precision);
+  
+    int reqPrecision = getPrecision(precision);
+    
+    printExp(exp, reqPrecision);
+    
     return 0;
 }
 
@@ -41,24 +42,55 @@ int factorial(int i)
     return i * factorial(i-1);
 }
 
-float getNumber(void)
+double getNumber(void)
 {
-    float i;  
+    double number;
+
     printf("Enter the required precision: \n");
-    scanf("%f", &i);
-    return i;
+    scanf("%lf", &number);
+    
+    while(number >= 1 || number <= 0)
+    {
+        printf("You entered an invalid character\n");
+        printf("Enter the required precision: \n");
+        scanf("%lf", &number);
+    }
+    
+    return number;
 }
 
-double calculateExp(float precision)
+double calculateExp(const double precision)
 {
     double temp = 1.0;
     double exp = 1.0;   
     int num = 1;
-    while(temp > precision)
+    
+    while(temp >= precision)
     {
-        temp = 1.0 / (double) factorial(num);
+        temp = 1.0 / factorial(num);
         exp += temp ;
         num++;
     }
+    
     return exp;
+}
+
+void printExp(const double exp, int n)
+{  
+    char buff[200];
+    sprintf(buff, "%.*f", n, exp); 
+    printf("Exponent =  %s", buff);
+}
+
+int getPrecision(double input)
+{
+    int count  = 0;
+    double temp = input;
+   
+    while(temp < 1)
+    {
+       temp *= 10;
+       count++;
+    }
+    return count;
 }
