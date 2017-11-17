@@ -14,21 +14,20 @@
 #include <stdlib.h>
 
 int factorial(int i);
-double getNumber(void);
+double getPrecision(void);
 double calculateExp(const double precision);
 void printExp(const double exp, int reqPrecision);
-int getPrecision(double input);
+int calcAccuracy(double input);
 
 int main(int argc, char** argv) 
 {
-    double precision = getNumber();  
+    double precision = getPrecision();  
     
-
     double exp = calculateExp(precision);
   
-    int reqPrecision = getPrecision(precision);
+    int accuracy = calcAccuracy(precision);
     
-    printExp(exp, reqPrecision);
+    printExp(exp, accuracy);
     
     return 0;
 }
@@ -42,7 +41,7 @@ int factorial(int i)
     return i * factorial(i-1);
 }
 
-double getNumber(void)
+double getPrecision(void)
 {
     double number;
 
@@ -82,7 +81,7 @@ void printExp(const double exp, int n)
     printf("Exponent =  %s", buff);
 }
 
-int getPrecision(double input)
+int calcAccuracy(double input)
 {
     int count  = 0;
     double temp = input;
