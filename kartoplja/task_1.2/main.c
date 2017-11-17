@@ -13,6 +13,9 @@
 #include <stdlib.h>
 #include <math.h>
 
+#define true 1
+#define false 0
+
 void convertToDecimal(char *binaryNum, int result);
 void getBinaryNum(char *bNum);
 int isBinary(char *binaryNum);
@@ -25,36 +28,35 @@ int main(int argc, char** argv)
     
     int result = isBinary(binaryNum);
 
-    convertToDecimal(binaryNum, result);
-            
+    if(result > 0)
+    {
+        convertToDecimal(binaryNum, result);
+    }
+     else
+    {
+        printf("You entered a wrong number\n");
+    }
     return 0;
 }
 
 void convertToDecimal(char *binaryNum, int result)
 {
-    if(result == 1)
+    int i, count = 0;
+    int decimalNumber = 0;
+    for(int i = strlen(binaryNum) - 1; i >= 0; i--)
     {
-       int i, count = 0;
-        int decimalNumber = 0;
-        for(int i = strlen(binaryNum) - 1; i >= 0; i--)
+        if(binaryNum[i] == '1')
         {
-            if(binaryNum[i] == '1')
-            {
-                decimalNumber += powf(2, count);
-                count++;
-            }
-            else
-            {
-                count++;
-            }
-        } 
-        
-        printf("Binary number: %s\nDecimal number: %d", binaryNum, decimalNumber);
-    }
-    else
-    {
-        printf("You entered a wrong number\n");
-    }
+            decimalNumber += powf(2, count);
+            count++;
+        }
+        else
+        {
+            count++;
+        }
+    } 
+
+    printf("Binary number: %s\nDecimal number: %d", binaryNum, decimalNumber);
 }
 
 void getBinaryNum(char *bNum)
@@ -74,8 +76,7 @@ int isBinary(char *binaryNum)
             break;
         }
         else
-        {
-            
+        {          
         }
     }
     return 1;
