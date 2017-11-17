@@ -16,105 +16,104 @@
 #include <stdlib.h>
 #include <string.h>
 
-int * openFile(void);
-void selectionSort(int *array, int length, int min);
-void writeToFile(int *array, int length);
+int * readFromFile(void);
+void selectionSort(int *numbers,int length, int min);
+void writeToFile(int *sortNumbers, int length);
+
+int count = 0;
+int isValid;
 
 int main(int argc, char** argv)
 {
-    int *array = openFile();
+    int *inputNums = readFromFile();
     
+    if(isValid == 0)
+    {
+        selectionSort(inputNums,count, 0);
+        writeToFile(inputNums, count);  
+        free(inputNums);
+    }
+    else
+    {
+        free(inputNums);
+    }
     return 0;
 }
 
-int * openFile(void)
+int * readFromFile(void)
 {
-    int i, count = 0;
-    int s;
-
     FILE *inputFile;
     inputFile = fopen("C:\\Temp\\input.txt", "r");
 
     if(inputFile == NULL)
     {
         printf("File not found\n");
-        return  NULL;
-    }else
+    }
+    else
     {
         fseek(inputFile, 0, SEEK_END);
         unsigned int size = ftell(inputFile);
-
+        
+        int *numbers = (int*) malloc(size);
+        isValid = 0;
+        
         if(size == 0)
         {
+            isValid = -1;
             printf("File is empty\n");
             fclose(inputFile);
-
-            return 0;
-        }else
+        }
+        else
         {
             fseek(inputFile, 0, SEEK_SET);
-            
+            int i =0;
             while (!feof(inputFile) && !ferror(inputFile))
             {
-                fscanf(inputFile, "%*d%*[^\n]%*[-]", &s);
+                fscanf(inputFile, "%d\n", &numbers[i]);   
                 count++;
+                i++;
                 if(count > size)
                 {
+                    isValid = -1;
                     printf("File contains wrong string\n");
                     break;
                 }
+                else
+                {  
+                }
             }
-		
-            if(count <= size)
-            {
-             	int *arr = (int*) malloc(count*sizeof(int));
-            	fseek(inputFile, 0, SEEK_SET);
-
-            	for(i = 0; i < count; i++)
-            	{
-                	fscanf(inputFile, "%d\n", &arr[i]);
-            	} 
-
-            	fclose(inputFile);
-
-            	selectionSort(arr, count, 0);
-            	writeToFile(arr, count);
-            
-            	return arr;  
-            }else
-            {
-                return 0;
-            } 
+                        
+            fclose(inputFile);
         }
+        return numbers;
     }
 }
 
-void selectionSort(int *array, int length, int min)
+void selectionSort(int *numbers, int length, int min)
 {
     int index;
-    int m = array[min];
+    int m = numbers[min];
 
     for (int j = min; j < length; j++)
     {
-        if (array[j] <= m)
+        if (numbers[j] <= m)
         {
             index = j;
-            m = array[j];
+            m = numbers[j];
 	}
     }
 
-    int temp = array[index];
-    array[index] = array[min];
-    array[min] = temp;
+    int temp = numbers[index];
+    numbers[index] = numbers[min];
+    numbers[min] = temp;
 
     if(min < length - 1)
     {
-       selectionSort(array, length, min+1);
+       selectionSort(numbers, length,  min+1);
     }
 }
 
-
-void writeToFile(int *array, int length)
+void writeToFile(int *numbers, int length)
 {
     FILE *file = fopen("c:\\Temp\\output.txt", "w");
 
@@ -126,9 +125,8 @@ void writeToFile(int *array, int length)
     {
         for(int i = 0; i < length; i++)
         {
-            fprintf(file, "%d\n", array[i]);
+            fprintf(file, "%d\n", numbers[i]);
         }
-
         fclose(file);
     }
 }
