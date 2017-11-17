@@ -10,7 +10,7 @@
 Определите количество операций в таком цикле. Можно ли сократить количество операций?
 Входные данные: oдно целое число п.
 Выходные данные: все пифагоровы тройки для катетов и гипотенузы в виде таблицы.
- */
+*/
 
 #include <stdio.h>
 
@@ -60,6 +60,6 @@ void getPythagoreanTriplets(int length){
     }
     if (counter == 0)
     {
-        printf("There is no pythagorean trip");
+        printf("There is no pythagorean triplets");
     }
 }
