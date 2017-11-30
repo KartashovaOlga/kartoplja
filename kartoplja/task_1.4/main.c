@@ -17,23 +17,26 @@
 #include <stdio.h>
 #include <windows.h>
 
-void toString(float inputNum);
-float getNumber(void);
+void toString(int rub, int kop);
+void getNumber(int *rub, int *kop);
 
 int main(int argc, char** argv) 
 {
+    int rub;
+    int kop;
     SetConsoleOutputCP(CP_UTF8);
 
-    float inputNumber = getNumber();
-    toString(inputNumber);
-    
+    getNumber(&rub, &kop);
+    toString(rub, kop);
+
     return 0;
 }
 
-float getNumber(void)
+void getNumber(int *rub, int *kop)
 {
     float inputNumber;
-    char *inputBuff;
+    char inputBuff[7];
+
     printf("Enter the number:");
     scanf("%s", inputBuff);
     inputNumber = atof(inputBuff);
@@ -46,18 +49,22 @@ float getNumber(void)
         inputNumber = atof(inputBuff);
     }
 
-    return inputNumber;
+    strtok(inputBuff, ".");
+    int len=  strlen(inputBuff);
+
+    *rub = atoi(inputBuff);
+    *kop = atoi(inputBuff+len+1);
 }
 
-void toString(float inputNum)
+void toString(int rub, int kop)
 {
     char *outputStr[5];
-    float temp = inputNum;
+    float temp = rub;
 
     int hundreds = temp / 100;
     int dozen = (temp - 100 * hundreds) / 10;
     int rubles = temp - 100 * hundreds - 10 * dozen;
-    int kopek = 100 * (temp - 100 * hundreds - 10 * dozen - rubles);
+    int kopek = kop;
 
     //hundreds
     switch(hundreds)
@@ -130,11 +137,15 @@ void toString(float inputNum)
     {
         outputStr[3] = "рубля";
     }
-    else
+    else if(dozen != 0 || rubles != 0 || hundreds != 0)
     {
         outputStr[3] = "рублей";
     }
-
+    else
+    {
+        outputStr[3] = "рублей";
+        outputStr[1] = "ноль";
+    }
     //kopek output
     int pens = kopek;
     if(kopek > 20)
