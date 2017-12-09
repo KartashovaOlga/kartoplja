@@ -5,6 +5,8 @@
 и сколько из угаданных цифр занимают правильные позиции в числе.  Например,   если 
 задуманное число 725 и выдвинуто предположение, что задумано число 523, то угаданы 
 две цифры (5 и 2) и одна из них (2) занимает верную позицию. 
+Указание. Изучите функции cprintf,  textcolor,  textbackground. Используйте их в своей 
+программе. 
 Входные данные: предположения о загаданном числе – трехзначны ецелые числа. 
 Предусмотреть случаи некорректного ввода. 
 Выходные данные: сообщения об общем количестве угаданных цифр и количестве угаданных 
@@ -16,31 +18,68 @@
 #include <windows.h>
 #include <time.h>
 
+#define SIZE 3
+
 void getNumber(char *askedNum);
 boolean checkNumber(char *askedNumber);
-void checkWin(char *inputNum, char *computerNum);
-void randomCompNum(char *computerNum);
+boolean checkWin(char *inputNum, char *computerNum);
+void randomCompNum(char *compNum);
 
 int main()
 {
     SetConsoleOutputCP(CP_UTF8);
-    printf("Компьютер загадал целое, положительное, трехзначное число. Вы должны его угадать.\n*** ИГРА НАЧАЛАСЬ! ***\n\n");
 
-    char computerNum[3];
-    char askedNum[4];
+    char askedNum[SIZE];
+    char computerNum[SIZE] = {0};
+    int isWin = FALSE;
 
     randomCompNum(computerNum);
-    getNumber(askedNum);
-    checkWin(askedNum, computerNum);
 
+    printf("Компьютер загадал целое, положительное, трехзначное число, цифры которго не повторяются.\n");
+    printf("Вы должны его угадать.\nСдаться - введите <-1>\n\n*** ИГРА НАЧАЛАСЬ! ***\n\n");
+
+    while (!isWin)
+    {
+        getNumber(askedNum);
+
+        if (askedNum[0] != '-' && askedNum[1] != '1')
+        {
+            isWin = checkWin(askedNum, computerNum);
+        }
+        else
+        {
+            isWin = 1;
+            printf("*** ВЫ СДАЛИСЬ! ***\n");
+            printf("Выигрышное число - %c%c%c\n", computerNum[0], computerNum[1], computerNum[2]);
+        }
+    }
+    
     return 0;
 }
 
-void randomCompNum(char *computerNum)
+void randomCompNum(char * compNum)
 {
     srand(time(NULL));
-    int winNumber = 100 + rand() % 999;
-    itoa(winNumber, computerNum,10);
+    int winNumber1;
+    int winNumber2;
+    int winNumber3;
+
+    winNumber1 = 1 + rand() % 9;
+    compNum[0] = winNumber1 + '0';
+
+    winNumber2 = rand() % 10;
+    while (winNumber2 == winNumber1)
+    {
+        winNumber2 = rand() % 10;
+    }
+    compNum[1] = winNumber2 + '0';
+
+    winNumber3 = rand() % 10;
+    while (winNumber3 == winNumber2 || winNumber3 == winNumber1)
+    {
+        winNumber3 = rand() % 10;
+    }
+    compNum[2] = winNumber3 + '0';
 }
 
 void getNumber(char *askedNum)
@@ -50,10 +89,11 @@ void getNumber(char *askedNum)
 
     while (!checkNumber(askedNum))
     {
-        printf("Вы ввели некорректные данные. Введите целое, положительное, трехзначное число.\n");
+        printf("Вы ввели некорректные данные. Введите целое, положительное, трехзначное число, цифры которго не повторяются.\n");
         printf("Ваш вариант ->");
         scanf("%s", askedNum);
     }
+
 }
 
 boolean checkNumber(char *askedNumber)
@@ -67,7 +107,7 @@ boolean checkNumber(char *askedNumber)
     else
     {
         int number = atoi(askedNumber);
-        if(number < 100 || number > 999)
+        if(number < 100 && number != -1 || number > 999)
         {
             isValid = FALSE;
         }
@@ -79,13 +119,14 @@ boolean checkNumber(char *askedNumber)
     return isValid;
 }
 
-void checkWin(char *inputNum, char *computerNum )
+boolean checkWin(char *inputNum, char *computerNum )
 {
     int i, j;
     int position = 0;
     int count = 0;
+    int isWin = TRUE;
 
-    if(strcmp(inputNum, computerNum) == 0)
+    if(memcmp(inputNum, computerNum, SIZE) == 0)
     {
         printf("Угадано 3. На своих местах 3\n");
         printf("**** ВЫ ВЫИГРАЛИ! ****\n\n");
@@ -94,9 +135,9 @@ void checkWin(char *inputNum, char *computerNum )
     }
     else
     {
-        for(i = 0; i < strlen(computerNum); i++)
+        for(i = 0; i < SIZE; i++)
         {
-            for (j = 0; j < strlen(inputNum); j++)
+            for (j = 0; j < SIZE; j++)
             {
                 if(computerNum[i] == inputNum[j])
                 {
@@ -117,7 +158,7 @@ void checkWin(char *inputNum, char *computerNum )
         }
 
         printf("Угадано %d. На своих местах %d\n", count, position);
-        getNumber(inputNum);
-        checkWin(inputNum, computerNum);
+        isWin = FALSE;
     }
+    return isWin;
  }
