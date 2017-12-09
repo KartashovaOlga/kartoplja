@@ -33,11 +33,6 @@ int main(int argc, char** argv) {
     }
     else
     {
-        int i;
-        for(i = 0; i < squaireLength; i++)
-        {
-            free(inputArr[i]);
-        }
         free(inputArr);
     }
 
