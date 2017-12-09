@@ -35,7 +35,7 @@ int main(int argc, char** argv)
 void getNumber(int *rub, int *kop)
 {
     float inputNumber;
-    char inputBuff[7];
+    char inputBuff[6] = {0};
 
     printf("Enter the number:");
     scanf("%s", inputBuff);
@@ -69,15 +69,15 @@ void toString(int rub, int kop)
     //hundreds
     switch(hundreds)
     {
-        case 1: outputStr[0] = "сто"; break;
-        case 2: outputStr[0] = "двести"; break;
-        case 3: outputStr[0] = "триста"; break;
-        case 4: outputStr[0] = "четыреста"; break;
-        case 5: outputStr[0] = "пятьсот"; break;
-        case 6: outputStr[0] = "шестьсот"; break;
-        case 7: outputStr[0] = "семьсот"; break;
-        case 8: outputStr[0] = "восемьсот"; break;
-        case 9: outputStr[0] = "девятьсот"; break;
+        case 1: outputStr[0] = "сто "; break;
+        case 2: outputStr[0] = "двести "; break;
+        case 3: outputStr[0] = "триста "; break;
+        case 4: outputStr[0] = "четыреста "; break;
+        case 5: outputStr[0] = "пятьсот "; break;
+        case 6: outputStr[0] = "шестьсот "; break;
+        case 7: outputStr[0] = "семьсот "; break;
+        case 8: outputStr[0] = "восемьсот "; break;
+        case 9: outputStr[0] = "девятьсот "; break;
         default: outputStr[0] = ""; break;
     }
 
@@ -87,27 +87,27 @@ void toString(int rub, int kop)
         case 1:
             switch (rubles)//rubles
             {
-                case 0: outputStr[1] = "десять"; outputStr[2] = ""; break;
-                case 1: outputStr[1] = "одиннадцать"; outputStr[2] = ""; break;
-                case 2: outputStr[1] = "двенадцать"; outputStr[2] = ""; break;
-                case 3: outputStr[1] = "тринадцать"; outputStr[2] = ""; break;
-                case 4: outputStr[1] = "четырнадцать"; outputStr[2] = ""; break;
-                case 5: outputStr[1] = "пятнадцать"; outputStr[2] = ""; break;
-                case 6: outputStr[1] = "шестнадцать"; outputStr[2] = ""; break;
-                case 7: outputStr[1] = "семнадцать"; outputStr[2] = ""; break;
-                case 8: outputStr[1] = "восемнадцать"; outputStr[2] = ""; break;
-                case 9: outputStr[1] = "девятнадцать"; outputStr[2] = ""; break;
+                case 0: outputStr[1] = "десять "; outputStr[2] = ""; break;
+                case 1: outputStr[1] = "одиннадцать "; outputStr[2] = ""; break;
+                case 2: outputStr[1] = "двенадцать "; outputStr[2] = ""; break;
+                case 3: outputStr[1] = "тринадцать "; outputStr[2] = ""; break;
+                case 4: outputStr[1] = "четырнадцать "; outputStr[2] = ""; break;
+                case 5: outputStr[1] = "пятнадцать "; outputStr[2] = ""; break;
+                case 6: outputStr[1] = "шестнадцать "; outputStr[2] = ""; break;
+                case 7: outputStr[1] = "семнадцать "; outputStr[2] = ""; break;
+                case 8: outputStr[1] = "восемнадцать "; outputStr[2] = ""; break;
+                case 9: outputStr[1] = "девятнадцать "; outputStr[2] = ""; break;
                 default:  break;
              }
             break;
-        case 2: outputStr[1] = "двадцать"; break;
-        case 3: outputStr[1] = "тридцать"; break;
-        case 4: outputStr[1] = "сорок"; break;
-        case 5: outputStr[1] = "пятьдесят"; break;
-        case 6: outputStr[1] = "шестьдесят"; break;
-        case 7: outputStr[1] = "семьдесят"; break;
-        case 8: outputStr[1] = "восемьдесят"; break;
-        case 9: outputStr[1] = "девяносто"; break;
+        case 2: outputStr[1] = "двадцать "; break;
+        case 3: outputStr[1] = "тридцать "; break;
+        case 4: outputStr[1] = "сорок "; break;
+        case 5: outputStr[1] = "пятьдесят "; break;
+        case 6: outputStr[1] = "шестьдесят "; break;
+        case 7: outputStr[1] = "семьдесят "; break;
+        case 8: outputStr[1] = "восемьдесят "; break;
+        case 9: outputStr[1] = "девяносто "; break;
         default: outputStr[1] = ""; break;
     }
 
@@ -115,15 +115,15 @@ void toString(int rub, int kop)
     {
         switch(rubles) // rubles
         {
-            case 1: outputStr[2] = "один"; break;
-            case 2: outputStr[2] = "два"; break;
-            case 3: outputStr[2] = "три"; break;
-            case 4: outputStr[2] = "четыре"; break;
-            case 5: outputStr[2] = "пять"; break;
-            case 6: outputStr[2] = "шесть"; break;
-            case 7: outputStr[2] = "семь"; break;
-            case 8: outputStr[2] = "восемь"; break;
-            case 9: outputStr[2] = "девять"; break;
+            case 1: outputStr[2] = "один "; break;
+            case 2: outputStr[2] = "два "; break;
+            case 3: outputStr[2] = "три "; break;
+            case 4: outputStr[2] = "четыре "; break;
+            case 5: outputStr[2] = "пять "; break;
+            case 6: outputStr[2] = "шесть "; break;
+            case 7: outputStr[2] = "семь "; break;
+            case 8: outputStr[2] = "восемь "; break;
+            case 9: outputStr[2] = "девять "; break;
             default: outputStr[2] = ""; break;
         }
     }
@@ -131,20 +131,20 @@ void toString(int rub, int kop)
     //rubles output
     if(dozen != 1 && rubles == 1)
     {
-        outputStr[3] = "рубль";
+        outputStr[3] = "рубль ";
     }
     else if(dozen != 1 && rubles == 2 || dozen != 1 && rubles == 3 || dozen != 1 && rubles == 4)
     {
-        outputStr[3] = "рубля";
+        outputStr[3] = "рубля ";
     }
     else if(dozen != 0 || rubles != 0 || hundreds != 0)
     {
-        outputStr[3] = "рублей";
+        outputStr[3] = "рублей ";
     }
     else
     {
-        outputStr[3] = "рублей";
-        outputStr[1] = "ноль";
+        outputStr[3] = "рублей ";
+        outputStr[1] = "ноль ";
     }
     //kopek output
     int pens = kopek;
@@ -171,14 +171,14 @@ void toString(int rub, int kop)
 
     if(kopek < 10 && kopek > 0)
     {
-        printf("%s %s %s %s 0%d %s\n", outputStr[0], outputStr[1], outputStr[2], outputStr[3], kopek, outputStr[4]);
+        printf("%s%s%s%s0%d %s\n", outputStr[0], outputStr[1], outputStr[2], outputStr[3], kopek, outputStr[4]);
     }
     else if(kopek == 0)
     {
-        printf("%s %s %s %s 00 %s\n", outputStr[0], outputStr[1], outputStr[2], outputStr[3], outputStr[4]);
+        printf("%s%s%s%s00 %s\n", outputStr[0], outputStr[1], outputStr[2], outputStr[3], outputStr[4]);
     }
     else
     {
-        printf("%s %s %s %s %d %s\n", outputStr[0], outputStr[1], outputStr[2], outputStr[3], kopek, outputStr[4]);
+        printf("%s%s%s%s%d %s\n", outputStr[0], outputStr[1], outputStr[2], outputStr[3], kopek, outputStr[4]);
     }
 }
