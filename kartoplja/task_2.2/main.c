@@ -14,23 +14,21 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-int * readFromFile(void);
+int * readFromFile(int *length, int *isValid);
 void selectionSort(int *numbers,int length, int min);
 void writeToFile(int *sortNumbers, int length);
 
-int count = 0;
-int isValid;
-
 int main(int argc, char** argv)
 {
-    int *inputNums = readFromFile();
-    
-    if(isValid == 0)
+    int length;
+    int isValid;
+    int *inputNums = readFromFile(&length, &isValid);
+
+    if(isValid > 0)
     {
-        selectionSort(inputNums,count, 0);
-        writeToFile(inputNums, count);  
+        selectionSort(inputNums,length, 0);
+        writeToFile(inputNums, length);
         free(inputNums);
     }
     else
@@ -40,7 +38,7 @@ int main(int argc, char** argv)
     return 0;
 }
 
-int * readFromFile(void)
+int * readFromFile(int *length, int *isValid)
 {
     FILE *inputFile;
     inputFile = fopen("C:\\Temp\\input.txt", "r");
@@ -53,36 +51,35 @@ int * readFromFile(void)
     {
         fseek(inputFile, 0, SEEK_END);
         unsigned int size = ftell(inputFile);
-        
-        int *numbers = (int*) malloc(size);
-        isValid = 0;
-        
+
+        int *numbers = (int*) calloc(size/2, 4);
+        *isValid = 1;
+
         if(size == 0)
         {
-            isValid = -1;
+            *isValid = -1;
             printf("File is empty\n");
             fclose(inputFile);
         }
         else
         {
             fseek(inputFile, 0, SEEK_SET);
-            int i =0;
+            int i = 0;
             while (!feof(inputFile) && !ferror(inputFile))
             {
-                fscanf(inputFile, "%d\n", &numbers[i]);   
-                count++;
+                fscanf(inputFile, "%d\n", &numbers[i]);
                 i++;
-                if(count > size)
+                if(i > size)
                 {
-                    isValid = -1;
+                    *isValid = -1;
                     printf("File contains wrong string\n");
                     break;
                 }
                 else
-                {  
+                {
                 }
             }
-                        
+            *length = i;
             fclose(inputFile);
         }
         return numbers;
@@ -100,7 +97,7 @@ void selectionSort(int *numbers, int length, int min)
         {
             index = j;
             m = numbers[j];
-	}
+        }
     }
 
     int temp = numbers[index];
@@ -109,7 +106,7 @@ void selectionSort(int *numbers, int length, int min)
 
     if(min < length - 1)
     {
-       selectionSort(numbers, length,  min+1);
+        selectionSort(numbers, length,  min+1);
     }
 }
 
