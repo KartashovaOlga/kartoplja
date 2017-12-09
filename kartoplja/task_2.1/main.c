@@ -3,39 +3,48 @@
 Указание. Используйте в реализации двумерный массив.
 Входные данные: в первой строке файла записано целое число  N – порядок магического квадрата.
 В следующих N строках записанопо N целых чисел через пробел.
-Выходныеданные: cлово ‘YES’, есликвадратявляетсямагическим, ‘NO’ – иначе.
+Выходные данные: cлово ‘YES’, если квадрат является магическим, ‘NO’ – иначе.
 */
-
 
 #include <stdio.h>
 #include <stdlib.h>
 
-int ** readFromFile();
+int ** readFromFile(int *isValid, int *squaireLength);
 void writeToFile(int isMagic);
-int checkMagic(int **inputArr);
-
-int squaireLength;
-int isValid;
+int checkMagic(int **inputArr, int squaireLength);
 
 int main(int argc, char** argv) {
-    int **inputArr = readFromFile();
+    int isValid;
+    int squaireLength;
+
+    int **inputArr = readFromFile(&isValid, &squaireLength);
 
     if(isValid > 0)
     {
-        int isMagic = checkMagic(inputArr);
+        int isMagic = checkMagic(inputArr, squaireLength);
         writeToFile(isMagic);
 
+        int i;
+        for(i = 0; i < squaireLength; i++)
+        {
+            free(inputArr[i]);
+        }
         free(inputArr);
     }
     else
     {
+        int i;
+        for(i = 0; i < squaireLength; i++)
+        {
+            free(inputArr[i]);
+        }
         free(inputArr);
     }
 
     return 0;
 }
 
-int ** readFromFile()
+int ** readFromFile(int *isValid, int *squaireLength)
 {
     int i, j;
     int count = 0;
@@ -44,12 +53,12 @@ int ** readFromFile()
 
     FILE *inputFile;
     inputFile = fopen("C:\\Temp\\input.txt", "r");
-    isValid = 1;
+    *isValid = 1;
 
     if(inputFile == NULL)
     {
         printf("File not found\n");
-        isValid = -1;
+        *isValid = -1;
     }
     else
     {
@@ -61,7 +70,7 @@ int ** readFromFile()
             printf("File is empty\n");
             fclose(inputFile);
 
-            isValid = -1;
+            *isValid = -1;
         }
         else
         {
@@ -74,21 +83,20 @@ int ** readFromFile()
                 if(count > size)
                 {
                     printf("File contains wrong string\n");
-                    isValid = -1;
+                    *isValid = -1;
                     break;
                 }
             }
             if(count <= size)
             {
-
                 fseek(inputFile, 0, SEEK_SET);
-                fscanf(inputFile, "%d\n", &squaireLength);
-                inputArr = (int**) calloc(squaireLength, sizeof(int));
+                fscanf(inputFile, "%d\n", squaireLength);
+                inputArr = (int**) calloc(squaireLength[0], sizeof(int));
 
-                for(i = 0; i < squaireLength; i++)
+                for(i = 0; i < squaireLength[0]; i++)
                 {
-                    inputArr[i] = (int*) calloc(squaireLength, sizeof(int));
-                    for(j = 0; j < squaireLength; j++)
+                    inputArr[i] = (int*) calloc(squaireLength[0], sizeof(int));
+                    for(j = 0; j < squaireLength[0]; j++)
                     {
                         fscanf(inputFile, "%d\n", &inputArr[i][j]);
                     }
@@ -101,20 +109,21 @@ int ** readFromFile()
     return inputArr;
 }
 
-int checkMagic(int **inputArr)
+int checkMagic(int **inputArr, int squaireLength)
 {
-    int lineSumm, columnSumm, diagSumm1, diagSumm2;
-    lineSumm = columnSumm = diagSumm1 = diagSumm2 = 0;
+    int lineSumm = 0;
+    int columnSumm = 0;
+    int diagSumm1 = 0;
+    int diagSumm2 = 0;
     int i, j;
 
     for(i = 0; i < squaireLength; i++)
     {
-        diagSumm1 += inputArr[i][i];
-    }
+        diagSumm2 += inputArr[i][squaireLength - 1 - i];
 
-    for(i = 0, j = squaireLength -1; i < squaireLength, j >=0; i++, j--)
-    {
-        diagSumm2 += inputArr[i][j];
+
+
+        diagSumm1 += inputArr[i][i];
     }
 
     if(diagSumm1 == diagSumm2)
