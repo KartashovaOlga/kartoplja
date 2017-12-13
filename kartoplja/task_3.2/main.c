@@ -131,6 +131,7 @@ int * readFromFile(int *isValid, int *length)
         }
         else
         {
+            *isValid = 1;
             fseek(inputFile, 0, SEEK_SET);
             int count = 0;
             int *input = (int*)calloc(size/2, 4);
@@ -143,11 +144,11 @@ int * readFromFile(int *isValid, int *length)
                 {
                     printf("File contains the wrong string\n");
                     *isValid = -1;
+                    break;
                 }
             }
 
             *length = count;
-            *isValid = 1;
             fclose(inputFile);
             return input;
         }
