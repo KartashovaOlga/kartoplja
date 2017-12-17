@@ -11,18 +11,16 @@
  */
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <mem.h>
 
 float  readFromFile(void);
 void writeToFile(float summ);
-
 
 int main(int argc, char** argv)
 {
     float summ = readFromFile();
     writeToFile(summ);
-    
+
     return 0;
 }
 
@@ -55,9 +53,9 @@ float readFromFile(void)
         else
         {
             fseek(inputFile, 0, SEEK_SET);
-            
-            
-             while (!feof(inputFile) && !ferror(inputFile))
+
+
+            while (!feof(inputFile) && !ferror(inputFile))
             {
                 fscanf(inputFile, "%f\n", &f);
                 summ += f;
@@ -69,7 +67,7 @@ float readFromFile(void)
                 }
             }
             fclose(inputFile);
-            
+
             return summ;
         }
     }
@@ -78,21 +76,58 @@ float readFromFile(void)
 void writeToFile(float summ)
 {
     if(summ > 0)
-    {    
-        char str[] = "---------";
-        char position[] = "123456789";
+    {
         FILE *file = fopen("c:\\Temp\\output.txt", "w");
 
         if(file == NULL)
         {
             printf("File was not created\n");
-        } 
+        }
         else
         {
-            fprintf(file, "%0*.*f\n", 9, 2, summ);
-            fprintf(file, "%s\n", str);
-            fprintf(file, "%s", position);
-        
+            if(summ >= 100000)
+            {
+                fprintf(file, "The sum contains more then 9 numerals\n");
+            }
+            else
+            {
+                char sumStr[] = {'*', '*', '*', '*', '*', '*', '*', '*', '*'};
+                int size = 9;
+
+                char result[9];
+                sprintf(result, "%.2f", summ);
+
+                int i;
+                int j;
+
+                if(summ >= 1000)
+                {
+                    for(i = size, j = strlen(result); i >= 0, j >= 0; i--, j--)
+                    {
+                        if(i == 2){
+                            sumStr[i] = '\'';
+                            i--;
+                            sumStr[i] = result[j];
+                        }
+                        else
+                        {
+                            sumStr[i] = result[j];
+                        }
+                    }
+                }
+                else
+                {
+                    for(i = size, j = strlen(result); i >= 0, j >= 0; i--, j--)
+                    {
+                        sumStr[i] = result[j];
+                    }
+                }
+
+                fprintf(file, "%s\n", sumStr);
+                fprintf(file, "%s\n", "---------");
+                fprintf(file, "%s", "123456789");
+            }
+
             fclose(file);
         }
     }
