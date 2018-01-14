@@ -24,6 +24,7 @@ void getNumber(char *askedNum);
 boolean checkNumber(char *askedNumber);
 boolean checkWin(char *inputNum, char *computerNum);
 void randomCompNum(char *compNum);
+boolean checkNum(char * compNum);
 
 int main()
 {
@@ -53,33 +54,24 @@ int main()
             printf("Выигрышное число - %c%c%c\n", computerNum[0], computerNum[1], computerNum[2]);
         }
     }
-    
+
     return 0;
 }
 
 void randomCompNum(char * compNum)
 {
     srand(time(NULL));
-    int winNumber1;
-    int winNumber2;
-    int winNumber3;
 
-    winNumber1 = 1 + rand() % 9;
-    compNum[0] = winNumber1 + '0';
+    int winNumber = 100 + rand() % 1000;
 
-    winNumber2 = rand() % 10;
-    while (winNumber2 == winNumber1)
+    itoa(winNumber, compNum, 10);
+
+    while (!checkNum(compNum))
     {
-        winNumber2 = rand() % 10;
+        winNumber = 100 + rand() % 1000;
+        itoa(winNumber, compNum, 10);
     }
-    compNum[1] = winNumber2 + '0';
 
-    winNumber3 = rand() % 10;
-    while (winNumber3 == winNumber2 || winNumber3 == winNumber1)
-    {
-        winNumber3 = rand() % 10;
-    }
-    compNum[2] = winNumber3 + '0';
 }
 
 void getNumber(char *askedNum)
@@ -162,3 +154,38 @@ boolean checkWin(char *inputNum, char *computerNum )
     }
     return isWin;
  }
+
+boolean checkNum(char * compNum)
+{
+    int size = 10;
+    char symbols[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+    char result[size];
+
+    int i, j;
+    int temp = 0;
+    for(i = 0; i < size; i++)
+    {
+        for(j = 0; j < strlen(compNum); j++)
+        {
+            if(symbols[i] == compNum[j])
+            {
+                temp++;
+            }
+            else
+            {
+            }
+        }
+
+        result[i] = temp;
+        temp = 0;
+    }
+
+    if(strchr(result, '2') == NULL && strchr(result, '3') == NULL)
+    {
+        return TRUE;
+    }
+    else
+    {
+        return FALSE;
+    }
+}
