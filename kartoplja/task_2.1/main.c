@@ -182,7 +182,6 @@ void writeToFile(int isMagic)
         {
             fprintf(file, "NO");
         }
-
         fclose(file);
     }
 }
