@@ -24,7 +24,7 @@ void getNumber(char *askedNum);
 boolean checkNumber(char *askedNumber);
 boolean checkWin(char *inputNum, char *computerNum);
 void randomCompNum(char *compNum);
-boolean checkNum(char * compNum);
+boolean checkValid(char * compNum);
 
 int main()
 {
@@ -36,22 +36,22 @@ int main()
 
     randomCompNum(computerNum);
 
-    printf("Компьютер загадал целое, положительное, трехзначное число, цифры которго не повторяются.\n");
+    printf("Компьютер загадал целое, положительное, трехзначное число, цифры которого не повторяются.\n");
     printf("Вы должны его угадать.\nСдаться - введите <-1>\n\n*** ИГРА НАЧАЛАСЬ! ***\n\n");
 
     while (!isWin)
     {
         getNumber(askedNum);
 
-        if (askedNum[0] != '-' && askedNum[1] != '1')
+        if (askedNum[0] == '-' && askedNum[1] == '1')
         {
-            isWin = checkWin(askedNum, computerNum);
+            isWin = TRUE;
+            printf("*** ВЫ СДАЛИСЬ! ***\n");
+            printf("Выигрышное число - %c%c%c\n", computerNum[0], computerNum[1], computerNum[2]);
         }
         else
         {
-            isWin = 1;
-            printf("*** ВЫ СДАЛИСЬ! ***\n");
-            printf("Выигрышное число - %c%c%c\n", computerNum[0], computerNum[1], computerNum[2]);
+            isWin = checkWin(askedNum, computerNum);
         }
     }
 
@@ -66,7 +66,13 @@ void randomCompNum(char * compNum)
 
     itoa(winNumber, compNum, 10);
 
-    while (!checkNum(compNum))
+    while (strlen(compNum) > 3)
+    {
+        winNumber = 100 + rand() % 1000;
+        itoa(winNumber, compNum, 10);
+    }
+
+    while (!checkValid(compNum))
     {
         winNumber = 100 + rand() % 1000;
         itoa(winNumber, compNum, 10);
@@ -81,7 +87,7 @@ void getNumber(char *askedNum)
 
     while (!checkNumber(askedNum))
     {
-        printf("Вы ввели некорректные данные. Введите целое, положительное, трехзначное число, цифры которго не повторяются.\n");
+        printf("Вы ввели некорректные данные. Введите целое, положительное, трехзначное число, цифры которого не повторяются.\n");
         printf("Ваш вариант ->");
         scanf("%s", askedNum);
     }
@@ -155,8 +161,9 @@ boolean checkWin(char *inputNum, char *computerNum )
     return isWin;
  }
 
-boolean checkNum(char * compNum)
+boolean checkValid(char * compNum)
 {
+    boolean ret_val = TRUE;
     int size = 10;
     char symbols[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
     char result[size];
@@ -180,12 +187,17 @@ boolean checkNum(char * compNum)
         temp = 0;
     }
 
-    if(strchr(result, '2') == NULL && strchr(result, '3') == NULL)
+    for(i = 0; i < size; i++)
     {
-        return TRUE;
+        if(result[i] == 2 || result[i] == 3)
+        {
+            ret_val = FALSE;
+            break;
+        }
+        else
+        {
+            continue;
+        }
     }
-    else
-    {
-        return FALSE;
-    }
+    return ret_val;
 }
