@@ -66,7 +66,7 @@ void randomCompNum(char * compNum)
 
     itoa(winNumber, compNum, 10);
 
-    while (strlen(compNum) > 3)
+    while (strlen(compNum) > SIZE)
     {
         winNumber = 100 + rand() % 1000;
         itoa(winNumber, compNum, 10);
@@ -172,7 +172,7 @@ boolean checkValid(char * compNum)
     int temp = 0;
     for(i = 0; i < size; i++)
     {
-        for(j = 0; j < strlen(compNum); j++)
+        for(j = 0; j < SIZE; j++)
         {
             if(symbols[i] == compNum[j])
             {
