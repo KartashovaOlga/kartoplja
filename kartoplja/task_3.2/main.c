@@ -11,34 +11,23 @@
 
 #include <stdio.h>
 #include <malloc.h>
+#include "Binary_Tree.h"
 
-struct node
-{
-    int data;
-    struct node * left;
-    struct node * right;
-};
 
-int mainMenu(struct node *tnode);
-int * readFromFile(int *isValid, int *length);
-struct node *addNode(struct node *tnode, int data);
-struct node *buildTree(struct node *tnode, int *input, int length);
-void prefixPrint(struct node *tree);
-void infixPrint(struct node *tnode);
-void postfixPrint(struct node *tnode);
-void deleteTree(struct node *tnode);
-struct node *deleteNode(struct node * tnode, int element);
+int mainMenu(t_tree *tnode);
+int * readFromFile(int *isValid, int *length, char *fileName);
 
 int main(int argc, char **argv)
 {
     int length;
     int isValid;
+    char *treeFile = "C:\\Temp\\tree.txt";
 
-    int *input = readFromFile(&isValid, &length);
+    int *input = readFromFile(&isValid, &length, treeFile);
 
     if(isValid > 0)
     {
-        struct node *tnode;
+        t_tree *tnode;
         tnode = buildTree(tnode, input, length);
 
         int isEnd = 1;
@@ -57,21 +46,35 @@ int main(int argc, char **argv)
     return 0;
 }
 
-int mainMenu(struct node *root)
+int mainMenu(t_tree *root)
 {
+    t_tree *copy_tree;
+    t_tree *other_tree;
+    int copyIsCreate = 0;
+    int otherIsCreate = 0;
+    int otherLength;
+    int isValid;
+    int *otherInput;
+    char *otherTreeFile = "C:\\Temp\\otherTree.txt";
+    char choice = 0;
+
     printf("MENU:\n");
     printf("1 - INORDER\n");
     printf("2 - PREORDER\n");
     printf("3 - POSTORDER\n");
-    printf("4 - DELETE TREE\n");
-    printf("5 - ADD ELEMENT\n");
-    printf("6 - DELETE ELEMENT\n");
-    printf("0 - QUIT\n");
+    printf("4 - ADD ELEMENT\n");
+    printf("5 - DELETE ELEMENT\n");
+    printf("6 - BUILD COPY OF TREE\n");
+    printf("7 - BUILD OTHER TREE\n");
+    printf("8 - INORDER FOR OTHER TREE\n");
+    printf("9 - PREORDER FOR OTHER TREE\n");
+    printf("P - POSTORDER FOR OTHER TREE\n");
+    printf("D - DELETE ALL TREES\n");
+    printf("Q - QUIT\n");
 
-    char choise = {0};
-    scanf("%s", &choise);
+    scanf("%s", &choice);
 
-    switch (choise)
+    switch (choice)
     {
         case '1':
             infixPrint(root);
@@ -86,31 +89,85 @@ int mainMenu(struct node *root)
             printf("\n");
             return 1;
         case '4':
-            deleteTree(root);
-            return 1;
-        case '5':
-            printf("Enter an element to add\n");
+            printf("Enter an element for adding\n");
             int addElement;
             scanf("%d", &addElement);
             addNode(root, addElement);
             return 1;
-        case '6':
-            printf("Enter an element to delete\n");
+        case '5':
+            printf("Enter an element for deleting\n");
             int deliteElement;
             scanf("%d", &deliteElement);
             root = deleteNode(root, deliteElement);
             return 1;
-        case '0':
+        case '6':
+            copy_tree = root;
+            printf("Copy of tree was built\n");
+            copyIsCreate = 1;
+            return 1;
+        case '7':
+            otherInput = readFromFile(&isValid, &otherLength, otherTreeFile);
+
+            if(isValid > 0)
+            {
+                other_tree = buildTree(other_tree, otherInput, otherLength);
+                printf("Other tree was built\n");
+                otherIsCreate = 1;
+            }
+            else
+            {
+                printf("Other tree was not built. Try again\n");
+            }
+            return 1;
+        case '8':
+            if(otherIsCreate > 0)
+            {
+                infixPrint(other_tree);
+                printf("\n");
+            }
+            else
+            {
+                printf("Other tree was not created\n");
+            }
+            return 1;
+        case '9':
+            if(otherIsCreate > 0)
+            {
+                prefixPrint(other_tree);
+                printf("\n");
+            }
+            else
+            {
+                printf("Other tree was not created\n");
+            }
+            return 1;
+        case 'P':
+            if(otherIsCreate > 0)
+            {
+                postfixPrint(other_tree);
+                printf("\n");
+            }
+            else
+            {
+                printf("Other tree was not created\n");
+            }
+            return 1;
+        case 'D':
+            deleteTree(root);
+            deleteTree(copy_tree);
+            printf("All trees were deleted\n");
+            return -1;
+        case 'Q':
             return -1;
         default:
             return 1;
     }
 }
 
-int * readFromFile(int *isValid, int *length)
+int * readFromFile(int *isValid, int *length, char *fileName)
 {
     FILE *inputFile;
-    inputFile = fopen("C:\\Temp\\input.txt", "r");
+    inputFile = fopen(fileName, "r");
 
     if(inputFile == NULL)
     {
@@ -153,135 +210,4 @@ int * readFromFile(int *isValid, int *length)
             return input;
         }
     }
-}
-
-struct node *addNode(struct node *tnode, int data)
-{
-    if(tnode == NULL)
-    {
-        tnode = (struct node *)malloc(sizeof(struct node));
-        tnode->data = data;
-        tnode->left = tnode->right = NULL;
-    }
-    else if(data < tnode->data)
-    {
-        tnode->left = addNode(tnode->left, data);
-    }
-    else
-    {
-        tnode->right = addNode(tnode->right, data);
-    }
-    return tnode;
-}
-
-struct node *buildTree(struct node *tnode, int *input, int length)
-{
-    int i;
-    tnode = NULL;
-
-    for(i = 0; i < length; i++)
-    {
-        tnode = addNode(tnode, input[i]);
-    }
-
-    return tnode;
-}
-
-void prefixPrint(struct node *tnode)
-{
-    if (tnode != NULL)
-    {
-        printf("%d ", tnode->data);
-        prefixPrint(tnode->left);
-        prefixPrint(tnode->right);
-    }
-}
-
-void infixPrint(struct node *tnode)
-{
-    if (tnode != NULL)
-    {
-        infixPrint(tnode->left);
-        printf("%d ", tnode->data);
-        infixPrint(tnode->right);
-    }
-}
-
-void postfixPrint(struct node *tnode)
-{
-    if (tnode != NULL)
-    {
-        postfixPrint(tnode->left);
-        postfixPrint(tnode->right);
-        printf("%d ", tnode->data);
-    }
-}
-
-void deleteTree(struct node *tnode)
-{
-    if(tnode != NULL)
-    {
-        deleteTree(tnode->left);
-        deleteTree(tnode->right);
-        free(tnode);
-    }
-}
-
-struct node *deleteNode(struct node *tnode, int element)
-{
-    struct node *tree,*tree2;
-
-    if(!tnode)
-    {
-        printf("There is no this element\n");
-        return tnode;
-    }
-
-    if(tnode->data == element)
-    {
-        if(tnode->left == tnode->right)
-        {
-            free(tnode);
-            return NULL;
-        }
-        else if(tnode->left == NULL)
-        {
-            tree = tnode->right;
-            free(tnode);
-            return tree;
-        }
-        else if(tnode->right == NULL)
-        {
-            tree = tnode->left;
-            free(tnode);
-            return tree;
-        }
-        else if(tnode->left == NULL)
-        {
-            tree2 = tnode->right;
-            tree = tnode->right;
-            while(tree->left)
-            {
-                tree = tree->left;
-            }
-            tree->left = tnode->left;
-            free(tnode);
-            return tree2;
-        }
-        else
-        {
-           printf("Root can not be deleted\n");
-            return tnode;
-        }
-    }
-    else if(tnode->data < element)
-    {
-        tnode->right = deleteNode(tnode->right, element);
-    }
-    else
-    {
-        tnode->left = deleteNode(tnode->left, element);
-    }
-
-    return tnode;
 }
