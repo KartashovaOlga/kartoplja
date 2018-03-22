@@ -21,7 +21,7 @@ int main(int argc, char **argv)
     char *infix = readFromFile();
     length = strlen(infix);
 
-    Stack_t *myStack = (Stack_t*)malloc(sizeof(Stack_t));
+    Stack_t *myStack = (Stack_t*)malloc(sizeof(char));
     push(myStack, '(');
 
     char *postfix = parseInput(myStack, infix, length);
@@ -102,4 +102,3 @@ void writeToFile(char *postfix, int length)
         fclose(file);
     }
 }
-
