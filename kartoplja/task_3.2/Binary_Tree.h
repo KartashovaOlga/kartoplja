@@ -12,7 +12,9 @@ void prefixPrint(t_tree *tree);
 void infixPrint(t_tree *tnode);
 void postfixPrint(t_tree *tnode);
 void deleteTree(t_tree *tnode);
+t_tree *copyTree(t_tree *tnode);
 t_tree *deleteNode(t_tree * tnode, int element);
+int isEqual(t_tree *tnode1, t_tree *tnode2);
 
 
 t_tree *addNode(t_tree *tnode, int data)
@@ -93,7 +95,7 @@ t_tree *deleteNode(t_tree *tnode, int element)
 
     if(!tnode)
     {
-        printf("There is no this element\n");
+        printf("There is no element\n");
         return tnode;
     }
 
@@ -148,4 +150,40 @@ t_tree *deleteNode(t_tree *tnode, int element)
     }
 
     return tnode;
+}
+
+t_tree *copyTree(t_tree *tnode)
+{
+    t_tree *newTree = NULL;
+
+    if(tnode = NULL)
+    {
+        return NULL;
+    }
+    else
+    {
+        newTree = addNode(newTree, tnode->data);
+       // newTree->left = copyTree(tnode->left);
+       // newTree->right = copyTree(tnode->right);
+
+        return newTree;
+    }
+}
+
+int isEqual(t_tree *tnode1, t_tree *tnode2)
+{
+    if (tnode1 == NULL && tnode2 == NULL)
+    {
+        return 1;
+    }
+    else if (tnode1 != NULL && tnode2 != NULL)
+    {
+        return( tnode1->data == tnode2->data &&
+        isEqual(tnode1->left, tnode2->left) &&
+        isEqual(tnode1->right, tnode2->right));
+    }
+    else
+    {
+        return 0;
+    }
 }

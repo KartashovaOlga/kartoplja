@@ -16,6 +16,7 @@
 
 int mainMenu(t_tree *tnode);
 int * readFromFile(int *isValid, int *length, char *fileName);
+void printResultOfComparing(int result);
 
 int main(int argc, char **argv)
 {
@@ -36,7 +37,6 @@ int main(int argc, char **argv)
         {
             isEnd = mainMenu(tnode);
         }
-        deleteTree(tnode);
         free(input);
     }
     else
@@ -50,13 +50,16 @@ int mainMenu(t_tree *root)
 {
     t_tree *copy_tree;
     t_tree *other_tree;
-    int copyIsCreate = 0;
-    int otherIsCreate = 0;
+    int copyIsCreate;
+    int otherIsCreate;
     int otherLength;
     int isValid;
     int *otherInput;
     char *otherTreeFile = "C:\\Temp\\otherTree.txt";
     char choice = 0;
+    int delTree;
+    int delCopy;
+    int delOther;
 
     printf("MENU:\n");
     printf("1 - INORDER\n");
@@ -64,11 +67,12 @@ int mainMenu(t_tree *root)
     printf("3 - POSTORDER\n");
     printf("4 - ADD ELEMENT\n");
     printf("5 - DELETE ELEMENT\n");
-    printf("6 - BUILD COPY OF TREE\n");
+    printf("6 - BUILD COPY OF DEFAULT TREE\n");
     printf("7 - BUILD OTHER TREE\n");
     printf("8 - INORDER FOR OTHER TREE\n");
     printf("9 - PREORDER FOR OTHER TREE\n");
     printf("P - POSTORDER FOR OTHER TREE\n");
+    printf("C - COMPARE TRIES\n");
     printf("D - DELETE ALL TREES\n");
     printf("Q - QUIT\n");
 
@@ -101,7 +105,7 @@ int mainMenu(t_tree *root)
             root = deleteNode(root, deliteElement);
             return 1;
         case '6':
-            copy_tree = root;
+            copy_tree = copyTree(root);
             printf("Copy of tree was built\n");
             copyIsCreate = 1;
             return 1;
@@ -120,7 +124,7 @@ int mainMenu(t_tree *root)
             }
             return 1;
         case '8':
-            if(otherIsCreate > 0)
+            if(otherIsCreate == 1)
             {
                 infixPrint(other_tree);
                 printf("\n");
@@ -131,7 +135,7 @@ int mainMenu(t_tree *root)
             }
             return 1;
         case '9':
-            if(otherIsCreate > 0)
+            if(otherIsCreate == 1)
             {
                 prefixPrint(other_tree);
                 printf("\n");
@@ -141,8 +145,34 @@ int mainMenu(t_tree *root)
                 printf("Other tree was not created\n");
             }
             return 1;
+        case 'C':
+            printf("Choose tries for comparing:\n");
+            printf("D - Default tree and Copy of default tree\n");
+            printf("O - Other tree and Default tree\n");
+            char decision = 0;
+            int compareResult;
+
+            printf("First tree\n");
+            scanf("%s", &decision);
+
+            if(decision == 'D' && copyIsCreate == 1)
+            {
+                compareResult = isEqual(root, copy_tree);
+                printResultOfComparing(compareResult);
+            }
+            else if(decision == 'O' && otherIsCreate == 1)
+            {
+                compareResult = isEqual(root, other_tree);
+                printResultOfComparing(compareResult);
+            }
+            else
+            {
+                printf("Error of comparing\n");
+            }
+
+            return 1;
         case 'P':
-            if(otherIsCreate > 0)
+            if(otherIsCreate == 1)
             {
                 postfixPrint(other_tree);
                 printf("\n");
@@ -154,10 +184,39 @@ int mainMenu(t_tree *root)
             return 1;
         case 'D':
             deleteTree(root);
-            deleteTree(copy_tree);
+            //deleteTree(copy_tree);
+            deleteTree(other_tree);
             printf("All trees were deleted\n");
-            return -1;
+            otherIsCreate = -1;
+            copyIsCreate = -1;
+            delTree = 0;
+            delCopy = 0;
+            delOther = 0;
+            return 1;
         case 'Q':
+            if(delTree != 0)
+            {
+                deleteTree(root);
+            }
+            else
+            {
+            }
+
+            if(delCopy != 0 && copyIsCreate == 1)
+            {
+                deleteTree(copy_tree);
+            }
+            else
+            {
+            }
+
+            if(delOther != 0 && otherIsCreate == 1)
+            {
+                deleteTree(other_tree);
+            }
+            else
+            {
+            }
             return -1;
         default:
             return 1;
@@ -209,5 +268,20 @@ int * readFromFile(int *isValid, int *length, char *fileName)
             fclose(inputFile);
             return input;
         }
+    }
+}
+
+void printResultOfComparing(int result)
+{
+    if(result == 1)
+    {
+        printf("Tries are equals\n");
+    }
+    else if(result == 0)
+    {
+        printf("Tries are not equals\n");
+    }
+    else
+    {
     }
 }
