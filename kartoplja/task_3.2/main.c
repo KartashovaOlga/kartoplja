@@ -225,11 +225,6 @@ void mainMenu(t_tree *root)
                 }
                 isEnd = 0;
                 continue;
-            case '0':
-                prefixPrint(copyOfTree);
-                printf("\n");
-                isEnd = 1;
-                continue;
             default:
                 isEnd = 1;
                 continue;
