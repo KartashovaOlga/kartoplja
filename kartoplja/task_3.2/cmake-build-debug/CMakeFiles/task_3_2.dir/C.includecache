@@ -6,9 +6,13 @@
 
 #IncludeRegexTransform: 
 
+C:/Users/OLGA/CLionProjects/task_3.2/Binary_Tree.h
+
 C:/Users/OLGA/CLionProjects/task_3.2/main.c
 stdio.h
 -
 malloc.h
 -
+Binary_Tree.h
+C:/Users/OLGA/CLionProjects/task_3.2/Binary_Tree.h
 

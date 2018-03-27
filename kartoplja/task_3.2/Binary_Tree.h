@@ -12,7 +12,7 @@ void prefixPrint(t_tree *tree);
 void infixPrint(t_tree *tnode);
 void postfixPrint(t_tree *tnode);
 void deleteTree(t_tree *tnode);
-t_tree *copyTree(t_tree *tnode);
+t_tree *copyTree(t_tree *tnode, t_tree *newTree);
 t_tree *deleteNode(t_tree * tnode, int element);
 int isEqual(t_tree *tnode1, t_tree *tnode2);
 
@@ -152,22 +152,23 @@ t_tree *deleteNode(t_tree *tnode, int element)
     return tnode;
 }
 
-t_tree *copyTree(t_tree *tnode)
+t_tree *copyTree(t_tree *tnode, t_tree *newTree)
 {
-    t_tree *newTree = NULL;
-
-    if(tnode = NULL)
+    if(tnode == NULL)
     {
+        newTree = NULL;
         return NULL;
     }
     else
     {
-        newTree = addNode(newTree, tnode->data);
-       // newTree->left = copyTree(tnode->left);
-       // newTree->right = copyTree(tnode->right);
-
-        return newTree;
     }
+
+    newTree = (struct node *)malloc(sizeof(struct node));
+    newTree->data = tnode->data;
+    newTree->left = copyTree(tnode->left, newTree->left);
+    newTree->right = copyTree(tnode->right, newTree->right);
+
+    return newTree;
 }
 
 int isEqual(t_tree *tnode1, t_tree *tnode2)
