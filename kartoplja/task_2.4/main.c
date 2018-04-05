@@ -20,49 +20,47 @@
 
 #define SIZE 3
 
-void getNumber(char *askedNum);
-boolean checkNumber(char *askedNumber);
-boolean checkWin(char *inputNum, char *computerNum);
-void randomCompNum(char *compNum);
+int getNumber(void);
+boolean checkNumber(char *askedNumber, int *guessNum);
+boolean checkWin(int guessNumber, int randNumber, char *compNum);
+int randomCompNum(void);
 boolean checkValid(int winNumber);
+void toArray(int inputNum, char *outputNum);
 
 int main()
 {
-
-
     SetConsoleOutputCP(CP_UTF8);
 
-    char askedNum[SIZE];
-    char computerNum[SIZE] = {0};
     int isWin = FALSE;
+    char compNum[10];
+    int guessNumber = 0;
+    int randNumber = randomCompNum();
 
-    randomCompNum(computerNum);
+    toArray(randNumber, &compNum);
 
     printf("Компьютер загадал число.\n");
     printf("Вы должны его угадать.\nСдаться - введите <-1>\n\n*** ИГРА НАЧАЛАСЬ! ***\n\n");
 
     while (!isWin)
     {
-        getNumber(askedNum);
+        guessNumber = getNumber();
 
-        if (askedNum[0] == '-' && askedNum[1] == '1')
+        if (guessNumber == -1)
         {
             isWin = TRUE;
             printf("*** ВЫ СДАЛИСЬ! ***\n");
-            printf("Выигрышное число - %c%c%c\n", computerNum[0], computerNum[1], computerNum[2]);
+            printf("Выигрышное число - %d\n", randNumber);
         }
         else
         {
-            isWin = checkWin(askedNum, computerNum);
+            isWin = checkWin(guessNumber, randNumber, compNum);
         }
     }
-
-
 
     return 0;
 }
 
-void randomCompNum(char * compNum)
+int randomCompNum(void)
 {
     srand(time(NULL));
 
@@ -73,25 +71,28 @@ void randomCompNum(char * compNum)
         winNumber = 100 + rand() % 900;
     }
 
-    itoa(winNumber, compNum, 10);
-
+    return winNumber;
 }
 
-void getNumber(char *askedNum)
+int getNumber(void)
 {
-    printf("Ваш вариант ->");
-    scanf("%s", askedNum);
+    char *askedNum;
+    int guessNum = 0;
 
-    while (!checkNumber(askedNum))
+    printf("Ваш вариант ->");
+    scanf("%s", &askedNum);
+
+    while (!checkNumber(&askedNum, &guessNum))
     {
         printf("Вы ввели некорректные данные. Введите целое, положительное, трехзначное число, цифры которого не повторяются.\n");
         printf("Ваш вариант ->");
-        scanf("%s", askedNum);
+        scanf("%s", &askedNum);
     }
 
+    return  guessNum;
 }
 
-boolean checkNumber(char *askedNumber)
+boolean checkNumber(char *askedNumber, int *guessNum)
 {
     boolean isValid = TRUE;
 
@@ -101,8 +102,9 @@ boolean checkNumber(char *askedNumber)
     }
     else
     {
-        int number = atoi(askedNumber);
-        if(number < 100 && number != -1 || number > 999)
+        *guessNum = atoi(askedNumber);
+
+        if(*guessNum < 100 && *guessNum != -1 || *guessNum > 999)
         {
             isValid = FALSE;
         }
@@ -114,15 +116,16 @@ boolean checkNumber(char *askedNumber)
     return isValid;
 }
 
-boolean checkWin(char *inputNum, char *computerNum )
+boolean checkWin(int guessNumber, int randNumber, char * compNum)
 {
-    clock_t start = clock();
-    int i, j;
+    int i;
     int position = 0;
     int count = 0;
     int isWin = TRUE;
+    int length = 10;
+    char inputNum[length];
 
-    if(memcmp(inputNum, computerNum, SIZE) == 0)
+    if(guessNumber == randNumber)
     {
         printf("Угадано 3. На своих местах 3\n");
         printf("**** ВЫ ВЫИГРАЛИ! ****\n\n");
@@ -131,35 +134,29 @@ boolean checkWin(char *inputNum, char *computerNum )
     }
     else
     {
-        for(i = 0; i < SIZE; i++)
+        toArray(guessNumber, &inputNum);
+
+        for(i = 0; i < length; i++)
         {
-            for (j = 0; j < SIZE; j++)
+            if(inputNum[i] != 0 && compNum[i] != 0)
             {
-                if(computerNum[i] == inputNum[j])
+                count++;
+                if(inputNum[i] == compNum[i])
                 {
-                    count++;
-                    if(j == i)
-                    {
-                        position++;
-                    }
-                    else
-                    {
-                    }
-                    break;
+                    position++;
                 }
                 else
                 {
                 }
+            }
+            else
+            {
             }
         }
 
         printf("Угадано %d. На своих местах %d\n", count, position);
         isWin = FALSE;
     }
-
-    clock_t end = clock();
-    double seconds = (double)(end - start) / CLOCKS_PER_SEC;
-    printf("The time: %f seconds\n", seconds);
 
     return isWin;
  }
@@ -175,5 +172,31 @@ boolean checkValid(int winNumber)
     else
     {
         return  TRUE;
+    }
+}
+
+void toArray(int inputNum, char *outputNum)
+{
+    int i;
+    int j;
+    char num[SIZE];
+    char checkNumbers[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+
+    itoa(inputNum, num, 10);
+
+    for (i = 0; i < 10; i++)
+    {
+        for(j = 0; j < SIZE; j++)
+        {
+            if(num[j] == checkNumbers[i])
+            {
+                outputNum[i] = j + 1;
+                break;
+            }
+            else
+            {
+                outputNum[i] = 0;
+            }
+        }
     }
 }
