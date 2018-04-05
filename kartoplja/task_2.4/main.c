@@ -24,10 +24,12 @@ void getNumber(char *askedNum);
 boolean checkNumber(char *askedNumber);
 boolean checkWin(char *inputNum, char *computerNum);
 void randomCompNum(char *compNum);
-boolean checkValid(char * compNum);
+boolean checkValid(int winNumber);
 
 int main()
 {
+
+
     SetConsoleOutputCP(CP_UTF8);
 
     char askedNum[SIZE];
@@ -36,7 +38,7 @@ int main()
 
     randomCompNum(computerNum);
 
-    printf("Компьютер загадал целое, положительное, трехзначное число, цифры которого не повторяются.\n");
+    printf("Компьютер загадал число.\n");
     printf("Вы должны его угадать.\nСдаться - введите <-1>\n\n*** ИГРА НАЧАЛАСЬ! ***\n\n");
 
     while (!isWin)
@@ -55,6 +57,8 @@ int main()
         }
     }
 
+
+
     return 0;
 }
 
@@ -62,21 +66,14 @@ void randomCompNum(char * compNum)
 {
     srand(time(NULL));
 
-    int winNumber = 100 + rand() % 1000;
+    int winNumber = 0;
+
+    while (!checkValid(winNumber))
+    {
+        winNumber = 100 + rand() % 900;
+    }
 
     itoa(winNumber, compNum, 10);
-
-    while (strlen(compNum) > SIZE)
-    {
-        winNumber = 100 + rand() % 1000;
-        itoa(winNumber, compNum, 10);
-    }
-
-    while (!checkValid(compNum))
-    {
-        winNumber = 100 + rand() % 1000;
-        itoa(winNumber, compNum, 10);
-    }
 
 }
 
@@ -119,6 +116,7 @@ boolean checkNumber(char *askedNumber)
 
 boolean checkWin(char *inputNum, char *computerNum )
 {
+    clock_t start = clock();
     int i, j;
     int position = 0;
     int count = 0;
@@ -158,46 +156,24 @@ boolean checkWin(char *inputNum, char *computerNum )
         printf("Угадано %d. На своих местах %d\n", count, position);
         isWin = FALSE;
     }
+
+    clock_t end = clock();
+    double seconds = (double)(end - start) / CLOCKS_PER_SEC;
+    printf("The time: %f seconds\n", seconds);
+
     return isWin;
  }
 
-boolean checkValid(char * compNum)
+boolean checkValid(int winNumber)
 {
-    boolean ret_val = TRUE;
-    int size = 10;
-    char symbols[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-    char result[size];
-
-    int i, j;
-    int temp = 0;
-    for(i = 0; i < size; i++)
+    if( winNumber % 10 == winNumber / 10 % 10
+        || winNumber % 10 == winNumber / 100
+        || winNumber / 10 % 10 == winNumber / 100 )
     {
-        for(j = 0; j < SIZE; j++)
-        {
-            if(symbols[i] == compNum[j])
-            {
-                temp++;
-            }
-            else
-            {
-            }
-        }
-
-        result[i] = temp;
-        temp = 0;
+        return FALSE;
     }
-
-    for(i = 0; i < size; i++)
+    else
     {
-        if(result[i] == 2 || result[i] == 3)
-        {
-            ret_val = FALSE;
-            break;
-        }
-        else
-        {
-            continue;
-        }
+        return  TRUE;
     }
-    return ret_val;
 }
