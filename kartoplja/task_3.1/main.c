@@ -11,7 +11,9 @@
 #include <mem.h>
 #include "Stack.h"
 
+
 char * readFromFile(void);
+int checkInfix(char *infix, int length);
 void writeToFile(char  *postfix, int length);
 
 int main(int argc, char **argv)
@@ -21,16 +23,24 @@ int main(int argc, char **argv)
     char *infix = readFromFile();
     length = strlen(infix);
 
-    Stack_t *myStack = (Stack_t*)malloc(sizeof(char));
-    push(myStack, '(');
+    if(checkInfix(infix, length) > 0)
+    {
+        Stack_t *myStack = (Stack_t*)malloc(sizeof(char));
+        push(myStack, '(');
 
-    char *postfix = parseInput(myStack, infix, length);
+        char *postfix = parseInput(myStack, infix, length);
 
-    writeToFile(postfix, length);
+        writeToFile(postfix, length);
+
+        free(postfix);
+        free(myStack);
+    }
+    else
+    {
+        printf("File contains wrong string\n");
+    }
 
     free(infix);
-    free(postfix);
-    free(myStack);
 
     return 0;
 }
@@ -59,19 +69,9 @@ char * readFromFile(void)
         else
         {
             fseek(inputFile, 0, SEEK_SET);
-            int count = 0;
             char *input = (char*)calloc(size, 1);
 
-            while (!feof(inputFile) && !ferror(inputFile))
-            {
-                fscanf(inputFile, "%c\n", &input[count]);;
-                count++;
-                if(count > size)
-                {
-                    printf("File contains the wrong string\n");
-                    return NULL;
-                }
-            }
+            fgets(input, size, inputFile);
 
             strcat(input, ")");
             fclose(inputFile);
@@ -81,6 +81,27 @@ char * readFromFile(void)
     }
 }
 
+int checkInfix(char *infix, int length)
+{
+    int i;
+    int isValid = 1;
+    for(i = 0; i < length; i++)
+    {
+       if(isOperand(infix[i]) > 0
+          || isOperator(infix[i]) > 0
+          || infix[i] == '('
+          || infix[i] == ')'
+          || infix[i] == ' ')
+       {
+           continue;
+       }
+       else
+       {
+           isValid = -1;
+       }
+    }
+    return isValid;
+}
 
 void writeToFile(char *postfix, int length)
 {
@@ -102,3 +123,4 @@ void writeToFile(char *postfix, int length)
         fclose(file);
     }
 }
+
