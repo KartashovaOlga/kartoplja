@@ -73,7 +73,7 @@ char *parseInput(Stack_t * myStack, char *infix, int length)
     int i;
     int j = 0;
     char current;
-    char *postfix = (char*)calloc(length * 2, 1);
+    char *postfix = (char*)calloc(2 * length, sizeof(char));
 
     for (i = 0; i < length; i++)
     {
