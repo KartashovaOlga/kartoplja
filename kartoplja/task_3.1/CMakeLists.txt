@@ -1,7 +1,6 @@
-cmake_minimum_required(VERSION 3.8)
-project(task_3_1)
+cmake_minimum_required(VERSION 3.12)
+project(Stack C)
 
-set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD 11)
 
-set(SOURCE_FILES main.c)
-add_executable(task_3_1 ${SOURCE_FILES})
+add_executable(Stack main.c Stack.c)
