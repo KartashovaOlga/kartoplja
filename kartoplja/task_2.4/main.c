@@ -1,201 +1,190 @@
 /*
-Напишите программу, которая реализует игру «Угадай число». Правила игры следующие. 
-Играют двое. Один задумывает число, второй – угадывает. На каждом шагеу гадывающий 
+Напишите программу, которая реализует игру «Угадай число». Правила игры следующие:
+Играют двое. Один задумывает число, второй – угадывает. На каждом шаге угадывающий
 делает предположение,  а задумавший число –  говорит,  сколько цифр числа угаданы
-и сколько из угаданных цифр занимают правильные позиции в числе.  Например,   если 
-задуманное число 725 и выдвинуто предположение, что задумано число 523, то угаданы 
-две цифры (5 и 2) и одна из них (2) занимает верную позицию. 
-Указание. Изучите функции cprintf,  textcolor,  textbackground. Используйте их в своей 
-программе. 
-Входные данные: предположения о загаданном числе – трехзначны ецелые числа. 
-Предусмотреть случаи некорректного ввода. 
-Выходные данные: сообщения об общем количестве угаданных цифр и количестве угаданных 
-цифр, которые находятся на своих местах. 
+и сколько из угаданных цифр занимают правильные позиции в числе.
+Входные данные: предположения о загаданном числе – трехзначные целые числа.
+Предусмотреть случаи некорректного ввода.
+Выходные данные: сообщения об общем количестве угаданных цифр и количестве угаданных
+цифр, которые находятся на своих местах.
 */
 
-#include <conio.h>
 #include <stdio.h>
-#include <windows.h>
+#include <stdbool.h>
+#include <rpc.h>
 #include <time.h>
+#include <conio.h>
 
-#define SIZE 3
+#define SIZE 10
 
+int createCompNumber(void);
 int getNumber(void);
-boolean checkNumber(char *askedNumber, int *guessNum);
-boolean checkWin(int guessNumber, int randNumber, char *compNum);
-int randomCompNum(void);
-boolean checkValid(int winNumber);
-void toArray(int inputNum, char *outputNum);
+bool guessNumIsValid(int guessNum);
+bool compNumIsValid(int compNum);
+void inputNumToPositionsArray(int inputNum, char *outputNum);
+void theGame(int compNum);
+void checkNumbersAndPositions(const char *arrayOfCompNum, const char *arrayOfGuessNum);
 
 int main()
 {
     SetConsoleOutputCP(CP_UTF8);
 
-    int isWin = FALSE;
-    char compNum[10];
-    int guessNumber = 0;
-    int randNumber = randomCompNum();
-
-    toArray(randNumber, &compNum);
+    static int compNum = 0;
+    compNum = createCompNumber();
 
     printf("Компьютер загадал число.\n");
     printf("Вы должны его угадать.\nСдаться - введите <-1>\n\n*** ИГРА НАЧАЛАСЬ! ***\n\n");
+    printf("Ваш вариант ->");
 
-    while (!isWin)
-    {
-        guessNumber = getNumber();
-
-        if (guessNumber == -1)
-        {
-            isWin = TRUE;
-            printf("*** ВЫ СДАЛИСЬ! ***\n");
-            printf("Выигрышное число - %d\n", randNumber);
-        }
-        else
-        {
-            isWin = checkWin(guessNumber, randNumber, compNum);
-        }
-    }
+    theGame(compNum);
 
     return 0;
 }
 
-int randomCompNum(void)
-{
-    srand(time(NULL));
-
-    int winNumber = 0;
-
-    while (!checkValid(winNumber))
-    {
-        winNumber = 100 + rand() % 900;
-    }
-
-    return winNumber;
-}
-
 int getNumber(void)
 {
-    char *askedNum;
-    int guessNum = 0;
-
-    printf("Ваш вариант ->");
-    scanf("%s", &askedNum);
-
-    while (!checkNumber(&askedNum, &guessNum))
-    {
-        printf("Вы ввели некорректные данные. Введите целое, положительное, трехзначное число, цифры которого не повторяются.\n");
-        printf("Ваш вариант ->");
-        scanf("%s", &askedNum);
-    }
+    int guessNum = -1;
+    scanf("%d", &guessNum);
 
     return  guessNum;
 }
 
-boolean checkNumber(char *askedNumber, int *guessNum)
+bool guessNumIsValid(int guessNum)
 {
-    boolean isValid = TRUE;
+    bool isValid = false;
 
-    if(strchr(askedNumber, 46))
+    if(guessNum >= 102 && guessNum <= 987)
     {
-        isValid = FALSE;
-    }
-    else
-    {
-        *guessNum = atoi(askedNumber);
-
-        if(*guessNum < 100 && *guessNum != -1 || *guessNum > 999)
+        if( guessNum % 10 == guessNum / 10 % 10
+            || guessNum % 10 == guessNum / 100
+            || guessNum / 10 % 10 == guessNum / 100 )
         {
-            isValid = FALSE;
+            printf("Вы ввели некорректные данные. Введите целое, положительное, трехзначное число, цифры которого не повторяются.\n");
+            printf("Ваш вариант ->");
         }
         else
         {
+            isValid = true;
         }
+    }
+    else
+    {
+        printf("Вы ввели некорректные данные. Введите целое, положительное, трехзначное число, цифры которого не повторяются.\n");
+        printf("Ваш вариант ->");
+    }
+    return isValid;
+}
+
+int createCompNumber(void)
+{
+    srand(time(NULL));
+
+    int compNum = 0;
+
+    while (compNumIsValid(compNum))
+    {
+        compNum = 100 + rand() % 900;
+    }
+
+    return compNum;
+}
+
+bool compNumIsValid(int compNum)
+{
+    bool isValid = false;
+
+    if( compNum % 10 == compNum / 10 % 10
+        || compNum % 10 == compNum / 100
+        || compNum / 10 % 10 == compNum / 100 )
+    {
+        isValid = true;
+    }
+    else
+    {
     }
 
     return isValid;
 }
 
-boolean checkWin(int guessNumber, int randNumber, char * compNum)
+void inputNumToPositionsArray(int inputNum, char *outputNum)
 {
-    int i;
-    int position = 0;
+    int century = inputNum / 100;
+    int decade = inputNum / 10 % 10;
+    int units = inputNum % 10;
+
+    memset(outputNum, 0, SIZE);
+
+    outputNum[century] = 3;
+    outputNum[decade] = 2;
+    outputNum[units] = 1;
+}
+
+void checkNumbersAndPositions(const char *arrayOfCompNum, const char *arrayOfGuessNum)
+{
     int count = 0;
-    int isWin = TRUE;
-    int length = 10;
-    char inputNum[length];
+    int position = 0;
+    int i;
 
-    if(guessNumber == randNumber)
+    for(i = 0; i < SIZE; i++)
     {
-        printf("Угадано 3. На своих местах 3\n");
-        printf("**** ВЫ ВЫИГРАЛИ! ****\n\n");
-        printf("Для завершения нажмите <Enter>\n");
-        getch();
-    }
-    else
-    {
-        toArray(guessNumber, &inputNum);
-
-        for(i = 0; i < length; i++)
+        if(count == 3)
         {
-            if(inputNum[i] != 0 && compNum[i] != 0)
+            break;
+        }
+        else if(arrayOfGuessNum[i] != 0 && arrayOfCompNum[i] != 0)
+        {
+            count++;
+            if(arrayOfGuessNum[i] == arrayOfCompNum[i])
             {
-                count++;
-                if(inputNum[i] == compNum[i])
-                {
-                    position++;
-                }
-                else
-                {
-                }
+                position++;
             }
             else
             {
             }
         }
-
-        printf("Угадано %d. На своих местах %d\n", count, position);
-        isWin = FALSE;
+        else
+        {
+        }
     }
 
-    return isWin;
- }
-
-boolean checkValid(int winNumber)
-{
-    if( winNumber % 10 == winNumber / 10 % 10
-        || winNumber % 10 == winNumber / 100
-        || winNumber / 10 % 10 == winNumber / 100 )
-    {
-        return FALSE;
-    }
-    else
-    {
-        return  TRUE;
-    }
+    printf("Угадано %d. На своих местах %d\n", count, position);
+    printf("Ваш вариант ->");
 }
 
-void toArray(int inputNum, char *outputNum)
+void theGame(int compNum)
 {
-    int i;
-    int j;
-    char num[SIZE];
-    char checkNumbers[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+    bool isWin = false;
+    char arrayOfCompNum[SIZE] ;
+    char arrayOfGuessNum[SIZE];
+    int guessNum;
 
-    itoa(inputNum, num, 10);
+    inputNumToPositionsArray(compNum, arrayOfCompNum);
 
-    for (i = 0; i < 10; i++)
+    while(!isWin)
     {
-        for(j = 0; j < SIZE; j++)
+        guessNum = getNumber();
+
+        if(guessNum == -1)
         {
-            if(num[j] == checkNumbers[i])
+            isWin = true;
+            printf("*** ВЫ СДАЛИСЬ! ***\n");
+            printf("Победное число - %d\n", compNum);
+        }
+        else if(guessNumIsValid(guessNum))
+        {
+            if(guessNum == compNum)
             {
-                outputNum[i] = j + 1;
-                break;
+                isWin = true;
+                printf("Угадано 3. На своих местах 3\n");
+                printf("**** ВЫ ВЫИГРАЛИ! ****\n\n");
+                printf("Для завершения нажмите <Enter>\n");
+                getch();
             }
             else
             {
-                outputNum[i] = 0;
+                inputNumToPositionsArray(guessNum, arrayOfGuessNum);
+
+                checkNumbersAndPositions(arrayOfCompNum, arrayOfGuessNum);
             }
         }
     }
