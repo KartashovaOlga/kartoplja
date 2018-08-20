@@ -2,18 +2,34 @@
 #include <stdio.h>
 #include "Stack.h"
 
-void push(Stack_t *myStack, char symb)
+Stack_t *createStack(void)
 {
-    myStack->stackArr[myStack->top] = symb;
+    Stack_t *myStack = NULL;
+
+    myStack = malloc(sizeof(Stack_t));
+    myStack->size = SIZE;
+    myStack->stack_Data = calloc(myStack->size, sizeof(char));
+    myStack->top = 0;
+
+    return myStack;
+}
+
+void push(Stack_t *myStack, const char symb)
+{
+    if(myStack->top == myStack->size)
+    {
+        resize(myStack);
+    }
+    myStack->stack_Data[myStack->top] = symb;
     myStack->top++;
 }
 
 char pop(Stack_t *myStack)
 {
-    if (isEmpty(myStack) > 0)
+    if (isEmpty(myStack))
     {
         myStack->top--;
-        return myStack->stackArr[myStack->top];
+        return myStack->stack_Data[myStack->top];
     }
     else
     {
@@ -23,8 +39,8 @@ char pop(Stack_t *myStack)
 
 char getTop(Stack_t *myStack)
 {
-    if (isEmpty(myStack) > 0) {
-        return myStack->stackArr[myStack->top - 1];
+    if (isEmpty(myStack)) {
+        return myStack->stack_Data[myStack->top - 1];
     }
     else
     {
@@ -32,48 +48,48 @@ char getTop(Stack_t *myStack)
     }
 }
 
-int isEmpty(Stack_t *myStack)
+bool isEmpty(Stack_t *myStack)
 {
     if (myStack->top > 0)
     {
-        return 1;
+        return true;
     }
     else
     {
-        return -1;
+        return false;
     }
 }
 
-int isOperand(char symb)
+bool isOperand(const char symb)
 {
     if (symb >= '0' && symb <= '9')
     {
-        return 1;
+        return true;
     }
     else
     {
-        return -1;
+        return false;
     }
 }
 
-int isOperator(char symb)
+bool isOperator(const char symb)
 {
     if (symb == '+' || symb == '-' || symb == '*' || symb == '/')
     {
-        return 1;
+        return true;
     }
     else
     {
-        return -1;
+        return false;
     }
 }
 
-char *parseInput(Stack_t * myStack, char *infix, int length)
+char *parseInput(Stack_t * myStack, const char *infix, const int length)
 {
     int i;
     int j = 0;
     char current;
-    char *postfix = (char*)calloc(2 * length, sizeof(char));
+    char *postfix = (char*)calloc(MULTIPLIER * length, sizeof(char));
 
     for (i = 0; i < length; i++)
     {
@@ -84,24 +100,22 @@ char *parseInput(Stack_t * myStack, char *infix, int length)
             push(myStack, current);
             continue;
         }
-        else if (isOperand(current) > 0)
+        else if (isOperand(current))
         {
             postfix[j] = current;
-            j++;
-            postfix[j] = ' ';
-            j++;
+            postfix[j+1] = ' ';
+            j += 2;
             continue;
         }
-        else if (isOperator(current) > 0)
+        else if (isOperator(current))
         {
-            while (isOperator(getTop(myStack)) > 0)
+            while (isOperator(getTop(myStack)))
             {
                 if (getPriority(current) <= getPriority(getTop(myStack)))
                 {
                     postfix[j] = pop(myStack);
-                    j++;
-                    postfix[j] = ' ';
-                    j++;
+                    postfix[j+1] = ' ';
+                    j += 2;
                     continue;
                 }
                 else
@@ -119,9 +133,8 @@ char *parseInput(Stack_t * myStack, char *infix, int length)
             while (getTop(myStack) != '(')
             {
                 postfix[j] = pop(myStack);
-                j++;
-                postfix[j] = ' ';
-                j++;
+                postfix[j+1] = ' ';
+                j += 2;
             }
             pop(myStack);
         }
@@ -133,7 +146,7 @@ char *parseInput(Stack_t * myStack, char *infix, int length)
     return postfix;
 }
 
-int getPriority(char symb)
+bool getPriority(char symb)
 {
     if(symb == '+' || symb == '-')
     {
@@ -143,4 +156,12 @@ int getPriority(char symb)
     {
         return HIGHPRIORITY;
     }
+}
+
+
+void resize(Stack_t *myStack)
+{
+    myStack->size *= MULTIPLIER;
+    myStack->stack_Data = realloc(myStack->stack_Data, myStack->size * sizeof(char));
+
 }
