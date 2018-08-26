@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/OLGA/CLionProjects/Stack/Stack.h
+stdbool.h
+-
+
+C:/Users/OLGA/CLionProjects/Stack/main.c
+stdio.h
+-
+malloc.h
+-
+mem.h
+-
+Stack.h
+C:/Users/OLGA/CLionProjects/Stack/Stack.h
+
